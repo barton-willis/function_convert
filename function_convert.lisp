@@ -1,0 +1,277 @@
+(in-package :maxima)
+
+(defun lambda-p (e)
+  (and (consp e) (eq 'lambda (caar e))))
+
+(defmvar *function-convert-hash* (make-hash-table :test 'equal))
+
+(defmacro define-function-converter (name (from to) args &body body)
+  `(progn
+     (defun ,name ,args
+       ,@body)
+     (setf (gethash (list ',from ',to) *function-convert-hash*)
+           #',name)))
+
+#|
+Possible user documentation:
+
+@deffn Function function_convert (@var{expr}, @var{f => g}, @dots{})
+Apply one or more function-conversion rules to the expression @var{expr}.
+A conversion rule has the form @code{f => g}, where @code{f} is the
+source function and @code{g} is either a target function name or a
+lambda expression.
+
+The operator @code{=>} indicates a @emph{semantic} conversion, not a
+literal renaming.  For example, the rule @code{sinc => sin} does not
+replace the symbol @code{sinc} by @code{sin}.  Instead, it applies the
+built-in identity
+
+@example
+sinc(x) = sin(x)/x
+@end example
+
+so that occurrences of @code{sinc(x)} in @var{expr} are rewritten as
+@code{sin(x)/x}.
+
+Users may also supply an explicit conversion by giving a lambda
+expression on the right-hand side.  For example:
+
+@example
+function_convert (expr, f => lambda([u], g(u)^2))
+@end example
+
+rewrites each call @code{f(u)} in @var{expr} to @code{g(u)^2}.
+
+Multiple conversions may be given; they are applied from left to right.
+
+@itemize @bullet
+@item
+@code{f} and @code{g} may be given as symbols or strings.
+@item
+If @code{g} is a lambda expression, it must accept exactly one argument.
+@item
+Malformed conversion rules cause an error.
+@end itemize
+
+@strong{Examples}
+
+@example
+(%i1) function_convert (sinc(3*x), sinc => sin);
+(%o1) sin(3*x)/(3*x)
+
+(%i2) function_convert (f(a) + f(b),
+                        f => lambda([u], u^2 + 1));
+(%o2) a^2 + 1 + b^2 + 1
+@end example
+
+
+@end deffn
+
+ |#
+;; Here “=>” indicates a semantic conversion, not a literal renaming. For example, “sinc => sin” does not 
+;; mean “replace the name sinc with sin”. Instead, it applies the built‑in identity sinc(x) = sin(x)/x.
+;; Specifically
+
+;; (a) f => g where both f and g are symbols means “use the built‑in conversion from f to g.” When there
+;;     is no such built-in conversion, do nothing.
+;; (b) f => lambda(...) means “use this explicit conversion instead.”
+
+($infix "=>")
+
+(defmfun $function_convert (e &rest fun-subs-list)
+  (flet ((fn (x)
+         (cond ((stringp x) ($verbify x))
+               ((lambda-p x) x)
+               (t ($nounify x))))
+         (check-subs (x)
+            (or (and
+                  (consp x)
+                  (eq (caar x) '$=>)
+                  (or (symbolp (second x)) (stringp (second x)))
+                  (or (symbolp (third x)) (lambda-p (third x))))
+                (merror "Bad transformation ~M" x))))
+    ;; check that the arguments in fun-subs-list are legitimate.
+    (every #'check-subs fun-subs-list)
+
+    (dolist (q fun-subs-list)
+      (setq e (function-convert e (fn (second q)) (fn (third q)))))
+    e))
+
+(defmfun function-convert (e op-old op-new)
+   (cond (($mapatom e) e)
+         ;; Case I: both op-old & op-new are symbols. For this case, look up the 
+         ;; transformation in the *function-convert-hash* hashtable.
+         ((and (consp e)
+               (eq (caar e) op-old)
+               (symbolp op-new)
+               ;; bind converter fn inside conjunction--it's OK!
+               (let ((fn (gethash (list op-old op-new) *function-convert-hash*)))
+                 (and fn
+                   (funcall fn (mapcar (lambda (q) (function-convert q op-old op-new)) (cdr e)))))))
+
+        ;; Case II: op-old is a symbol and op-new is a Maxima lambda form
+        ((and (consp e)
+              (eq (caar e) op-old)
+              (lambda-p op-new))
+          ($apply op-new (fapply 'mlist (mapcar (lambda (q) (function-convert q op-old op-new)) (cdr e)))))
+
+        (($subvarp (mop e)) ;subscripted function
+		      (subfunmake 
+		       (subfunname e) 
+			       (subfunsubs e) ;don't convert subscripts, but map over arguments
+			       (mapcar #'(lambda (q) (function-convert q op-old op-new)) (subfunargs e))))
+
+		    (t (fapply (caar e) 
+            (mapcar #'(lambda (q) (function-convert q op-old op-new)) (cdr e))))))
+
+
+;;; ------------------------------------------------------------
+;;; Starter Library of Function Converters for function_convert
+;;; ------------------------------------------------------------
+
+(define-function-converter sinc-to-sin (%sinc %sin) (x)
+    (let ((z (car x)))
+       (div (ftake '%sin z) z)))
+
+(define-function-converter factorial-to-gamma (mfactorial %gamma) (e)
+  (let ((z (car e))) (ftake '%gamma (add 1 z))))
+
+(define-function-converter csc-to-sin (%csc %sin) (e)
+    (let ((z (car e))) (div 1 (ftake '%sin z))))
+
+;; sinc → sin
+(define-function-converter sinc-to-sin (%sinc %sin) (x)
+  (let ((z (car x)))
+    (div (ftake '%sin z) z)))
+
+;;; ------------------------------------------------------------
+;;; Trig → Exponential
+;;; ------------------------------------------------------------
+
+;; sin → exp
+(define-function-converter sin-to-exp (%sin %exp) (x)
+  (let ((z (car x)))
+    (div
+      (sub (ftake '%exp (mul '$%i z))
+           (ftake '%exp (mul (neg '$%i) z)))
+      (mul 2 '$%i))))
+
+;; cos → exp
+(define-function-converter cos-to-exp (%cos %exp) (x)
+  (let ((z (car x)))
+    (div
+      (add (ftake '%exp (mul '$%i z))
+           (ftake '%exp (mul (neg '$%i) z)))
+      2)))
+
+;; tan → sin/cos
+(define-function-converter tan-to-sin-cos (%tan %sin) (x)
+  (let ((z (car x)))
+    (div (ftake '%sin z)
+         (ftake '%cos z))))
+
+;;; ------------------------------------------------------------
+;;; Hyperbolic → Exponential
+;;; ------------------------------------------------------------
+
+;; sinh → exp
+(define-function-converter sinh-to-exp (%sinh %exp) (x)
+  (let ((z (car x)))
+    (div
+      (sub (ftake '%exp z)
+           (ftake '%exp (neg z)))
+      2)))
+
+;; cosh → exp
+(define-function-converter cosh-to-exp (%cosh %exp) (x)
+  (let ((z (car x)))
+    (div
+      (add (ftake '%exp z)
+           (ftake '%exp (neg z)))
+      2)))
+
+;; tanh → sinh/cosh
+(define-function-converter tanh-to-sinh-cosh (%tanh %sinh) (x)
+  (let ((z (car x)))
+    (div (ftake '%sinh z)
+         (ftake '%cosh z))))
+
+;;; ------------------------------------------------------------
+;;; Factorial Family
+;;; ------------------------------------------------------------
+
+;; factorial → gamma
+(define-function-converter factorial-to-gamma ($factorial $gamma) (x)
+  (let ((z (car x)))
+    (ftake '$gamma (add z 1))))
+
+;; double_factorial → gamma (analytic continuation)
+;(define-function-converter dfact-to-gamma ($double_factorial $gamma) (x)
+;  (let ((z (car x)))
+;;    (mul (pow 2 (div z 2))
+  ;       (div (ftake '$gamma (add (div z 2) 1))
+  ;            (sqrt '$%pi)))))
+
+
+
+;;; ------------------------------------------------------------
+;;; Logarithm Base Conversions
+;;; ------------------------------------------------------------
+
+;; log_b(x) → log(x)/log(b)
+(define-function-converter logb-to-log (%logb %log) (x)
+  (let ((z (car x))
+        (b (cadr x)))
+    (div (ftake '%log z)
+         (ftake '%log b))))
+
+;; log10(x) → log(x)/log(10)
+(define-function-converter log10-to-log (%log10 %log) (x)
+  (let ((z (car x)))
+    (div (ftake '%log z)
+         (ftake '%log 10))))
+
+;;; ------------------------------------------------------------
+;;; Inverse Trig → Logarithmic
+;;; ------------------------------------------------------------
+
+;; asin → log
+(define-function-converter asin-to-log (%asin %log) (x)
+  (let ((z (car x)))
+    (mul (neg '$%i)
+         (ftake '%log
+                (add (mul '$%i z)
+                     (sqrt (sub 1 (mul z z))))))))
+
+;; atan → log
+(define-function-converter atan-to-log (%atan %log) (x)
+  (let ((z (car x)))
+    (mul (div '$%i 2)
+         (ftake '%log
+                (div (add '$%i z)
+                     (sub '$%i z))))))
+
+;;; ------------------------------------------------------------
+;;; Chebyshev Polynomials
+;;; ------------------------------------------------------------
+
+;; T_n(x) → cos(n arccos(x))
+(define-function-converter chebyshev-t-to-cos (%chebyshev_t %cos) (x)
+  (let ((n (car x))
+        (z (cadr x)))
+    (ftake '%cos (mul n (ftake '%acos z)))))
+
+;; U_n(x) → sin((n+1) arccos(x)) / sqrt(1−x²)
+(define-function-converter chebyshev-u-to-sin (%chebyshev_u %sin) (x)
+  (let ((n (car x))
+        (z (cadr x)))
+    (div (ftake '%sin (mul (add n 1) (ftake '%acos z)))
+         (sqrt (sub 1 (mul z z))))))
+
+(define-function-converter binomial-to-factorial ($binomial $factorial) (x)
+  (let ((n (car x))
+        (k (cadr x)))
+    (div (ftake '$factorial n)
+         (mul (ftake '$factorial k)
+              (ftake '$factorial (sub n k))))))
+
