@@ -7,7 +7,7 @@ Maxima Common Lisp code for applying function identities.
 A conversion rule has the form `f => g`, where `f` is  the source function and `g` is either a target function name
  or a lambda expression.
 
-The operator `=>` indicates a *semantic* conversion, not a literal renaming.  For example, the 
+The operator `=>` indicates a *semantic* conversion, not a literal renaming.  For example, the rule
  `sinc => sin` does not replace the symbol `sinc` by `sin`.  Instead, it applies the
 identity `sinc(x) = sin(x)/x` so that occurrences `sinc(x)` are rewritten as `sin(x)/x`.
 
