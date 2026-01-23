@@ -40,8 +40,7 @@ The package makes it easy to expand special functions, replace function calls wi
 ### Chaining multiple conversions
 
 ```maxima
-(%i12)	function_convert(sinc(x), sinc => sin, sin => exp);
-	
+(%i12)	function_convert(sinc(x), sinc => sin, sin => exp);	
 (%o12)	-((%i*(%e^(%i*x)-%e^(-(%i*x))))/(2*x))
 ```
 
