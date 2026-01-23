@@ -1,13 +1,12 @@
 # function_convert
 
-Maxima Common Lisp code for applying function identities.
 
-`function_convert` is a Maxima package for performing semantic function-to-function conversions on Maxima expressions.
+The file `function_convert` is a Maxima package for performing semantic function-to-function conversions on Maxima expressions.
 
 A conversion rule has the form `f => g`, where `f` is  the source function and `g` is either a target function name
  or a lambda expression.
 
-The operator `=>` indicates a *semantic* conversion, not a literal renaming.  For example, the 
+The operator `=>` indicates a *semantic* conversion, not a literal renaming.  For example, the rule
  `sinc => sin` does not replace the symbol `sinc` by `sin`.  Instead, it applies the
 identity `sinc(x) = sin(x)/x` so that occurrences `sinc(x)` are rewritten as `sin(x)/x`.
 
@@ -28,8 +27,7 @@ The package makes it easy to expand special functions, replace function calls wi
 (%i8)	function_convert(1+sinc(x), 'sinc => 'sin);
 (%o8)	sin(x)/x+1
 
-(%i9)	function_convert( (x!)!, "!" => 'gamma);
-	
+(%i9)	function_convert( (x!)!, "!" => 'gamma);	
 (%9)	gamma(gamma(x+1)+1)
 ```
 
@@ -42,8 +40,7 @@ The package makes it easy to expand special functions, replace function calls wi
 ### Chaining multiple conversions
 
 ```maxima
-(%i12)	function_convert(sinc(x), sinc => sin, sin => exp);
-	
+(%i12)	function_convert(sinc(x), sinc => sin, sin => exp);	
 (%o12)	-((%i*(%e^(%i*x)-%e^(-(%i*x))))/(2*x))
 ```
 
@@ -58,7 +55,7 @@ The operator `=>` indicates a semantic conversion, not a literal renaming.
 
 ## Error Checking
 
-`function_convert` validates each rule and signals an error for malformed conversions, such as missing arguments or invalid lambda expressions.
+The function `function_convert` validates each rule and signals an error for malformed conversions, such as missing arguments or invalid lambda expressions.
 
 ## Extensibility
 
@@ -68,9 +65,9 @@ No modification of Maxima’s simplifier or pattern matcher is required.
 
 ## Motivation
 
-Many systems (Maple, Mathematica, SymPy) provide built‑in expansions or rewrite mechanisms, but Maxima uses an alphabet soup of functions that perform semantic function‑to‑function conversions; examples include `makefac` and `makegamma`. In other cases, transformations are controlled by option variables—for example, `expintrep`. These names are easy to forget and not always easy to locate in the user documentation.
+Many systems (Maple, Mathematica, SymPy) provide built‑in expansions or rewrite mechanisms, but Maxima uses an alphabet soup of functions that perform semantic function‑to‑function conversions; examples include `makefac` and `makegamma`. In other cases, transformations are controlled by option variables—for example, `expintrep`. 
 
-Possibly, `function_convert` will provide a simple, uniform, and user-extensible way to do such conversions.
+These names are easy to forget and are not always easy to locate in the user documentation. Possibly, `function_convert` will provide a simple, uniform, and user-extensible way to do such conversions.
 
 ## Installation
 
