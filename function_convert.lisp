@@ -120,6 +120,9 @@ the function symbol."
 ;;; Starter Library of Function Converters for function_convert
 ;;; ------------------------------------------------------------
 
+;; Debugging Hint: If you define a converter that doesn't trigger correctly, try
+;; tracing lookup-converter and look at the output of list_converters.
+;; In define-converter, don't quote the source and target functions.
 (define-converter (%sinc %sin) (x)
   "Convert sinc(x) into sin(x)/x."
   (let ((z (car x)))
@@ -211,6 +214,5 @@ the function symbol."
 
  (define-converter (%gamma_incomplete %expand) (x)
   (let ((a (car x)) (z (cadr x)) ($gamma_expand t))
-    (print 99)
     (ftake '%gamma_incomplete a z)))
    
