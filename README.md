@@ -46,7 +46,7 @@ The package makes it easy to convert between equivalent special functions and to
 
 ### Listing all built-in converions
 
-To print all the built-in converter fuctions, use `list_converters`
+To print all the built-in converter functions, use `list_converters`
 ```maxima
 (%i34) list_converters();
 sinc => sin : Convert sinc(x) into sin(x)/x.
@@ -75,6 +75,18 @@ The function `function_convert` validates each rule and signals an error for mal
 Users may define new conversions by supplying a lambda expression using `function_convert(expr, f => lambda([u], some_expression_in_u));`
 
 No modification of Maxima’s simplifier or pattern matcher is required.
+
+Users who have at least a modest knowledge of Common Lisp and Maxima internals should
+be able to define new built-in conversions. The file `function_convert` has some examples; here
+is the definition of the converter for `sinc => 'sin`
+```lisp
+(define-converter (%sinc %sin) (x)
+  "Convert sinc(x) into sin(x)/x."
+  (let ((z (car x)))
+    (div (ftake '%sin z) z)))
+```
+The function `list_converters` prints the docstring for each converter along with
+the identifier for the rule (`f => g').
 
 ## Algorithm and Implementation 
 
