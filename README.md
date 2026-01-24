@@ -62,7 +62,7 @@ If a package defines new conversions, these conversions will be listed once the 
 A conversion rule has the form `f => g` where:
 
 - `f` is the source function
-- `g` is either a target function (using a built-in identity) or a lambda expression of one argument
+- `g` is either a target function (using a built-in identity) or a lambda expression 
 
 The operator `=>` indicates a semantic conversion, not a literal renaming. The operator `=>` has no evaluation or simplification rule of its own; it is purely notational.
 
