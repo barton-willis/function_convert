@@ -76,7 +76,7 @@ Users may define new conversions by supplying a lambda expression using `functio
 
 No modification of Maxima’s simplifier or pattern matcher is required.
 
-Users who have at least a modest knowledge of Common Lisp and Maxima internals should
+Users who have some understanding of Common Lisp and Maxima internals should
 be able to define new built-in conversions. The file `function_convert` has some examples; here
 is the definition of the converter for `sinc => 'sin`
 ```lisp
@@ -86,7 +86,7 @@ is the definition of the converter for `sinc => 'sin`
     (div (ftake '%sin z) z)))
 ```
 The function `list_converters` prints the docstring for each converter along with
-the identifier for the rule (`f => g'), so it is useful to include a docstring for
+the identifier for the rule (`f => g`), so it is useful to include a docstring for
 each converter function.
 
 ## Algorithm and Implementation 
