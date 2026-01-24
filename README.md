@@ -10,7 +10,7 @@ The operator `=>` indicates a *semantic* conversion, not a literal renaming.  Fo
  `sinc => sin` does not replace the symbol `sinc` by `sin`.  Instead, it applies the
 identity `sinc(x) = sin(x)/x` so that occurrences `sinc(x)` are rewritten as `sin(x)/x`.
 
-The package makes it easy to convert between equivalent special functions and to define custom transformations without using pattern matching.
+The package makes it easy to convert between similar functions and to define custom transformations without using pattern matching.
 
 ## Features
 
