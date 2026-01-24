@@ -86,7 +86,7 @@ For a rule to work correctly, the source function must be the name of a simplify
 would be useful to allow the source function to be a collection, say `trig` that matches all trigonometric 
 functions, but the code doesn't allow this. Fixing this would require allowing the source function to be a predicate-it's doable.
 
-At the top-level of `convert_function,` there is a bit of code that converts to the internal name of an operator. I suspect that this code has some limitations.
+At the top-level of `convert_function,` there is a bit of code that converts to the internal name of an operator. I suspect that this code has some limitations or bugs.
 
 ## Motivation
 
