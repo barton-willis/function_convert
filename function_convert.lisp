@@ -204,3 +204,13 @@ the function symbol."
   (let ((z (car x)) (g ($gensym)))
     (ftake '%product g g 1 z)))
 
+(define-converter (%atan %log) (x)
+  "Convert tan(x) to logarc form."
+  (let ((z (car x)))
+    ($logarc (ftake '%atan z))))
+
+ (define-converter (%gamma_incomplete %expand) (x)
+  (let ((a (car x)) (z (cadr x)) ($gamma_expand t))
+    (print 99)
+    (ftake '%gamma_incomplete a z)))
+   
