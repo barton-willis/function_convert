@@ -55,7 +55,7 @@ converters known to @code{function_convert}.  Each converter is shown
 as a pair @code{FROM => TO} followed by a short description taken from
 the converter's docstring.
 
-The output is intended for inspection.  It does not modify the converter table.
+The output is intended for information.  It does not modify the converter table.
 
 @example
 (%i1) list_converters();
