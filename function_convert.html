@@ -46,7 +46,7 @@ lambda expression.
 <p>The operator <code>=&gt;</code> indicates a <em>semantic</em> conversion, not a
 literal renaming.  For example, the rule <code>sinc =&gt; sin</code> does not
 replace the symbol <code>sinc</code> by <code>sin</code>.  Instead, it applies the
-built-in identity
+identity
 </p>
 <div class="example">
 <pre class="example">sinc(x) = sin(x)/x
@@ -59,32 +59,61 @@ built-in identity
 expression on the right-hand side.  For example:
 </p>
 <div class="example">
-<pre class="example">function_convert (expr, f =&gt; lambda([u], g(u)^2))
+<pre class="example">(%i1) function_convert(erfc(x), 'erfc =&gt; lambda([q], 1-erf(q)));
+(%o1)                             1 - erf(x)
 </pre></div>
 
-<p>rewrites each call <code>f(u)</code> in <var>expr</var> to <code>g(u)^2</code>.
-</p>
 <p>Multiple conversions may be given; they are applied from left to right.
 </p>
-<ul>
-<li> <code>f</code> and <code>g</code> may be given as symbols or strings.
-</li><li> If <code>g</code> is a lambda expression, it must accept exactly one argument.
-</li><li> Malformed conversion rules cause an error.
-</li></ul>
-
-<p><strong>Examples</strong>
+<p><strong>Example</strong>
 </p>
 <div class="example">
-<pre class="example">(%i1) function_convert (sinc(3*x), sinc =&gt; sin);
-(%o1) sin(3*x)/(3*x)
-
-(%i2) function_convert (f(a) + f(b),
-                        f =&gt; lambda([u], u^2 + 1));
-(%o2) a^2 + 1 + b^2 + 1
+<pre class="example">(%i1) function_convert(sinc(x), sinc =&gt; sin,sin =&gt; exp);
+                                %i x     - %i x
+                             (%e     - %e      ) %i
+(%o1)                      - ──────────────────────
+                                      2 x
 </pre></div>
 
+</dd></dl>
+
+<dl class="def">
+<dt id="index-list_005fconverters"><span class="category">Function: </span><span><strong>list_converters</strong> <em>[name_1, name_2, ...]</em><a href='#index-list_005fconverters' class='copiable-anchor'> &para;</a></span></dt>
+<dd>
+<p>Return a list of all registered function converters known to <code>function_convert</code>.  In addition to 
+returning this list, each converter is printed as a pair <code>FROM =&gt; TO</code> followed by a short description 
+taken from the converter&rsquo;s docstring.
+</p>
+<p>When called with no arguments, <code>list_converters</code> returns the full
+set of converters.  When one or more names are supplied, only those
+converters whose source function matches one of the given names are
+returned.
+</p>
+<div class="example">
+<pre class="example">(%i1) list_converters();
+sinc =&gt; sin : Convert sinc(x) into sin(x)/x.
+csc  =&gt; sin : Convert csc(x) into 1/sin(x).
+cos  =&gt; exp : Convert cos(x) to exponential form.
+tan  =&gt; sin : Convert tan(x) into sin(x)/cos(x).
+sin  =&gt; exp : Convert sin(x) to exponential form.
+(%o1) [sinc =&gt; sin, csc =&gt; sin, cos =&gt; exp, tan =&gt; sin, sin =&gt; exp]
+
+(%i2) list_converters(sinc, tan);
+sinc =&gt; sin : Convert sinc(x) into sin(x)/x.
+tan  =&gt; sin : Convert tan(x) into sin(x)/cos(x).
+(%o2) [sinc =&gt; sin, tan =&gt; sin]
+</pre></div>
+
+<p>The list of converters is maintained internally and entries appear in an unspecified order.  
+Entries appear in an unspecified order.
+</p>
+
+<p><code>function_convert</code>.  
+</p>
 
 </dd></dl>
+
+
 
 
 
