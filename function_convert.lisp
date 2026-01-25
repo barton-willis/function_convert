@@ -249,3 +249,8 @@ the function symbol."
                 t
                 0
                 z))))
+
+(define-converter (%erf %hypergeometric) (x)
+  "Convert erf(x) into (2*x/sqrt(pi))*hypergeometric([1/2],[3/2],-x^2)."
+  (let ((z (car x)) ($hypergeometric_representation t)) (ftake '%erf x)))
+  
