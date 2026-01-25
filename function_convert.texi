@@ -9,23 +9,21 @@ A conversion rule has the form @code{f => g}, where @code{f} is the
 source function and @code{g} is either a target function name or a
 lambda expression. 
 
-The operator @code{=>} has no evaluation or simplification rule of its own; 
-it is purely notational.
+
 
 The operator @code{=>} indicates a @emph{semantic} conversion, not a
 literal renaming. For example, the rule @code{sinc => sin} does not
 replace the symbol @code{sinc} by @code{sin}.  Instead, it applies the
-identity
-
+ @code{sinc(x) = sin(x)/x}; specifically
 @example
-sinc(x) = sin(x)/x
+(%i1) function_convert(sinc(x) + 1, sinc => sin);
+                                  sin(x)
+(%o1)                             ────── + 1
+                                    x
 @end example
 
-so that occurrences of @code{sinc(x)} in @var{expr} are rewritten as
-@code{sin(x)/x}.
-
 Users may also supply an explicit conversion by giving a lambda
-expression on the right-hand side.  For example:
+expression on the right-hand side. For example:
 
 @example
 (%i1) function_convert(erfc(x), 'erfc => lambda([q], 1-erf(q)));
@@ -73,8 +71,6 @@ tan  => sin : Convert tan(x) into sin(x)/cos(x).
 @end example
 
 The list of converters is maintained internally and entries appear in an unspecified order.  
-
-
 
 @code{function_convert}.  
 

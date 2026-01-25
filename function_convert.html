@@ -40,7 +40,6 @@ ul.no-bullet {list-style: none}
 <div class="top" id="Function-Convert">
 <h1 class="top">Function Convert</h1>
 
-
 <dl class="def">
 <dt id="index-function_005fconvert"><span class="category">Function: </span><span><strong>function_convert</strong> <em>(<var>expr</var>, <var>f =&gt; g</var>, &hellip;)</em><a href='#index-function_005fconvert' class='copiable-anchor'> &para;</a></span></dt>
 <dd><p>Apply one or more function-conversion rules to the expression <var>expr</var>.
@@ -48,23 +47,21 @@ A conversion rule has the form <code>f =&gt; g</code>, where <code>f</code> is t
 source function and <code>g</code> is either a target function name or a
 lambda expression. 
 </p>
-<p>The operator <code>=&gt;</code> has no evaluation or simplification rule of its own; 
-it is purely notational.
-</p>
+
+
 <p>The operator <code>=&gt;</code> indicates a <em>semantic</em> conversion, not a
 literal renaming. For example, the rule <code>sinc =&gt; sin</code> does not
 replace the symbol <code>sinc</code> by <code>sin</code>.  Instead, it applies the
-identity
-</p>
-<div class="example">
-<pre class="example">sinc(x) = sin(x)/x
+ <code>sinc(x) = sin(x)/x</code>; specifically
+</p><div class="example">
+<pre class="example">(%i1) function_convert(sinc(x) + 1, sinc =&gt; sin);
+                                  sin(x)
+(%o1)                             ────── + 1
+                                    x
 </pre></div>
 
-<p>so that occurrences of <code>sinc(x)</code> in <var>expr</var> are rewritten as
-<code>sin(x)/x</code>.
-</p>
 <p>Users may also supply an explicit conversion by giving a lambda
-expression on the right-hand side.  For example:
+expression on the right-hand side. For example:
 </p>
 <div class="example">
 <pre class="example">(%i1) function_convert(erfc(x), 'erfc =&gt; lambda([q], 1-erf(q)));
@@ -114,8 +111,6 @@ tan  =&gt; sin : Convert tan(x) into sin(x)/cos(x).
 
 <p>The list of converters is maintained internally and entries appear in an unspecified order.  
 </p>
-
-
 <p><code>function_convert</code>.  
 </p>
 
