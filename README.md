@@ -96,7 +96,7 @@ The function `function_convert` validates each rule and signals an error for mal
 
 ## Extensibility
 
-Users may define new conversions by supplying a lambda expression using `function_convert(expr, f => lambda([u], some_expression_in_u));`
+Users may define new conversions by supplying a lambda expression using `function_convert(f => lambda([u], some_expression_in_u), expr);`
 
 No modification of Maxima’s simplifier or pattern matcher is required.
 
