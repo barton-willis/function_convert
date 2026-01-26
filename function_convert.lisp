@@ -237,7 +237,7 @@ the function symbol."
 
 ;; I could do logarc transformations, but for now, let's not.
 
-(define-converter (%binomial "!") (x)
+(define-converter (%binomial mfactorial) (x)
 "Convert binomial(n,k) to factorial form."
   (let ((n (car x))
         (k (cadr x)))
