@@ -76,7 +76,7 @@ the function symbol."
 ;;     is no such built-in conversion, do nothing.
 ;; (b) f => lambda(...) means “use this explicit conversion instead.”
 
-;; I think this binding power makes a+b => c parse as (a+b) => c
+;; These binding powers makes a+b => c parse as (a+b) => c; it also makes '=>' left associative.
 ($infix "=>" 80 80)
 
 #| 
