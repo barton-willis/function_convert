@@ -113,6 +113,8 @@ The function `list_converters` prints the docstring for each converter along wit
 the identifier for the rule (`f => g`), so it is useful to include a docstring for
 each converter function.
 
+
+
 ## Algorithm and Implementation 
 
 The function `function_convert` walks an expression tree and replaces function calls according to well-defined rules. As such, it is simple code that is repeated in Maxima hundreds of times. It isn’t a pattern matcher or a general rewrite engine. 
@@ -136,6 +138,25 @@ These names are easy to forget and are not always easy to locate in the user doc
 ## Installation
 
 Place the package file in a directory on Maxima’s search path and load it with `load("function_convert");`
+
+## Using `defrule` as an alternative to `function_convert`
+
+Maxima's pattern-base `defrule` tool is an alternative to using `function_convert`. A simple
+example is
+```maxima
+(%i1) matchdeclare (aa, true)$
+
+(%i2) defrule(sinc_rule,  sinc(aa),sin(aa)/aa)$
+
+(%i3) apply1(sinc(sinc(x)), sinc_rule);
+                                       sin(x)
+                                 x sin(──────)
+                                         x
+(%o3)                            ─────────────
+                                    sin(x)
+
+```
+This method works well, especially for single use function-to-function conversions. But a `kill(all)` removes all rules defined by `defrule` and it still relies on an alphabet soup of functions.
 
 ## History
 
