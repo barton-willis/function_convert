@@ -128,6 +128,7 @@ the function symbol."
       e)))
 
 (defun function-convert (e op-old op-new)
+   ;(print `(e = ,e old = ,op-old new = ,op-new))
    (cond (($mapatom e) e)
          ;; Case I: both op-old & op-new are symbols. For this case, look up the 
          ;; transformation in the *function-convert-hash* hashtable.
@@ -245,7 +246,7 @@ the function symbol."
               (ftake 'mfactorial (sub n k))))))
 
  ;;"!" => product does n! => product(%g23,%g23,1,n)
- (define-converter (mfactorial %product) (x)
+ (define-converter (mfactorial $product) (x)
   "Convert n! to product(g,g,1,n)."
   (let ((z (car x)) (g ($gensym)))
     (ftake '%product g g 1 z)))
