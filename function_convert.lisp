@@ -104,7 +104,8 @@ the function symbol."
     (flet ((fn (x)
              (cond ((stringp x) ($verbify x))
                    ((lambda-p x) x)
-                   (t ($nounify x))))
+                   ;(t ($nounify x))))
+                   (t x)))
 
            (check-subs (x)
              (cond
@@ -134,10 +135,11 @@ the function symbol."
                (eq (caar e) op-old)
                (symbolp op-new)
                ;; bind converter fn inside conjunction--it's OK!
-               (let ((fn (lookup-converter op-old op-new)))
+               (let ((fn (or (lookup-converter op-old op-new) 
+                             (lookup-converter ($verbify op-old) op-new)
+                             (lookup-converter ($nounify op-old) op-new))))
                  (and fn
                    (funcall fn (mapcar (lambda (q) (function-convert q op-old op-new)) (cdr e)))))))
-
         ;; Case II: op-old is a symbol and op-new is a Maxima lambda form
         ((and (consp e)
               (eq (caar e) op-old)
@@ -221,7 +223,8 @@ the function symbol."
          (ftake '%cosh z))))
 
 ;; double_factorial → gamma
-;(define-converter ('%genfact %gamma) (x)
+;; This rule doesn't work because verbify("!!") =/= %genfact.
+;(define-converter (%genfact %gamma) (x)
 ; (let ((z (car x))) ($makegamma x)))
     
 ;; log10(x) → log(x)/log(10)
