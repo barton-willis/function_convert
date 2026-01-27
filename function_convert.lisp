@@ -317,8 +317,9 @@ the function symbol."
   (let ((z (car x)))
     (mul z (ftake '%signum z))))
 
+;;
 (define-converter (mabs %sqrt) (x)
   "Convert abs(x) into sqrt(x^2). When radexpand is true, this is simplified back to abs(x)"
   (let ((z (car x)))
-    (ftake 'mexpt (mul z z) (div 1 2))))
+    (ftake 'mexpt (mul z (ftake '$conjugate z)) (div 1 2))))
 
