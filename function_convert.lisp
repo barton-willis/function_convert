@@ -311,8 +311,8 @@ the function symbol."
   (let ((z (car x))) 
     (let (($hypergeometric_representation t)) (ftake '%erf z))))
   
-  ;; abs
-  (define-converter (mabs %signum) (x)
+;; abs
+(define-converter (mabs %signum) (x)
   "Convert abs(x) into x*signum(x)."
   (let ((z (car x)))
     (mul z (ftake '%signum z))))
