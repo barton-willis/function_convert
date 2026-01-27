@@ -171,7 +171,7 @@ For historical reasons only, the original `sinc` package still resides in this r
 - [ ] build a library of useful core rules
 - [ ] regression tests for `function_convert`
 - [x] texinfo documentation for `function_convert` (at least a good start)
-- [ ] decide if the converter(s) are first `function_convert(f => g,expr)` or last `function_convert(expr, f => g)`
+- [x] decide if the converter(s) are first `function_convert(f => g,expr)` or last `function_convert(expr, f => g)`
 - [ ] texinfo documentation for `sinc`
 - [ ] regression tests for `sinc`
 - [ ] TeX support for `sinc`
