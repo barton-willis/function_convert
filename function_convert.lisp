@@ -316,3 +316,9 @@ the function symbol."
   "Convert abs(x) into x*signum(x)."
   (let ((z (car x)))
     (mul z (ftake '%signum z))))
+
+(define-converter (mabs %sqrt) (x)
+  "Convert abs(x) into sqrt(x^2). When radexpand is true, this is simplified back to abs(x)"
+  (let ((z (car x)))
+    (ftake 'mexpt (mul z z) (div 1 2))))
+
