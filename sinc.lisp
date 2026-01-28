@@ -36,7 +36,8 @@
           (cond
             ((not (or (float-or-bigfloat-p re) (float-or-bigfloat-p im))) nil)
             ;; real case--avoid complex number division. When x is a bigfloat, can't do (/ sin x) x)s
-            ((zerop im) (maxima::to (bigfloat::/ (bigfloat::sin re) re)))
+            ((zerop im) (let ((z (bigfloat::to re))) 
+                (maxima::to (bigfloat::/ (bigfloat::sin z) z))))
             ;; do floating-point complex evaluation; there is 
             ;; no bigfloat::sinc. Maybe there should be, till then:
             (t
