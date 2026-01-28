@@ -111,3 +111,4 @@
   ((mexpt) sp2var ((mtimes) 2 *index)))
  *index 0 $inf))
 
+(defprop %sinc "\\sinc" texword)
