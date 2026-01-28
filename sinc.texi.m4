@@ -25,13 +25,13 @@ Examples:
 (%o2) 5.7043918199347985 + 7.802144269985125 %i
 
 (%i3) integrate(sinc(x), x);
-(%o3) expintegral_si(x)$
+(%o3) si(x)
 
 (%i4) taylor(sinc(x), x, 0, 5);
-(%o4) 1 - x^2/6 + ...
+(%o4) 1 - x^2/6 + x^4/120 + O(x^6)
 
 (%i5) powerseries(sinc(x), x, 0);
-(%o5) sum(((-1)^i2*x^(2*i2))/(2*i2+1)!,i2,0,inf)
+(%o5) sum((-1)^k * x^(2*k) / (2*k+1)!, k, 0, inf)
 @end example
 
 @end defun
