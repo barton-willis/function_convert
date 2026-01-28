@@ -1,0 +1,86 @@
+/* numeric inputs */
+sinc(0);
+1$
+
+block([numer : true], sinc(0));
+1.0$
+
+sinc(0.0);
+1.0$
+
+sinc(1.0);
+0.8414709848078965$
+
+sinc(2.5);
+ 0.23938885764158258$
+
+sinc(-3.0);
+0.0470400026866224$
+
+sinc(1.0b0);
+8.414709848078965b-1$
+
+sinc(1.0 + 2.0*%i);
+1.416996119211876 - 0.8743911970021461*%i$
+
+sinc(1.0b0 + 3.0b0*%i);
+2.470968822383473b0-2.000225543972226b0*%i$
+
+/* reflection */
+sinc(-x) - sinc(x);
+0$
+
+sinc(a+b) - sinc(-a-b);
+0$
+
+/* simplifications */
+sinc(%pi);
+0$
+
+(declare(n,integer),assume(n > 0), 0);
+0$
+
+sinc(n*%pi);
+0$
+
+sinc(2*n*%pi + %pi/3);
+(sqrt(3)/2)/(2*n * %pi + %pi/3)$
+
+(forget(n > 0), remove(n,integer),0);
+0$
+
+/* Taylor polynomials -------------------- */
+
+taylor(sinc(x), x, 0, 6);
+1-x^2/6+x^4/120$
+
+taylor(sinc(x), x, %pi/2, 3);
+2/%pi-(4*(x-%pi/2))/%pi^2-((%pi^2-8)*(x-%pi/2)^2)/%pi^3+((2*%pi^2-16)*(x-%pi/2)^3)/%pi^4$
+
+/* limits */
+
+limit(sinc(x), x, 0);
+1$
+
+limit(sinc(x), x, inf);
+0$
+
+limit(sinc(x), x, -inf);
+0$
+
+limit(sinc(x), x, minf);
+0$
+/* derivatives */
+diff(sinc(x), x);
+(cos(x)-sinc(x))/x$
+
+diff(sinc(x), x, 2);
+(-((cos(x)-sinc(x))/x)-sin(x))/x-(cos(x)-sinc(x))/x^2$
+
+/* antiderivatives  */
+
+integrate(sinc(x), x);
+expintegral_si(x)$
+
+integrate(sinc(a*x), x);
+expintegral_si(a*x)/a$

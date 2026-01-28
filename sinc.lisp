@@ -22,7 +22,7 @@
   (cond
     ;; Special case: sinc(0)
     ((zerop1 x)
-       (if $numer 0.0
+       (if $numer 1.0
            (add 1 x))) ; the add 1 ... makes sinc(0.0) = 1.0 (not 1) and sinc(0.0b0) = 1.0b0 (not 1)
     (t
      (multiple-value-bind (flag re im)
