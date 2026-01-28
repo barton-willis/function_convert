@@ -33,6 +33,26 @@ sinc(1.0 + 2.0*%i);
 sinc(1.0b0 + 3.0b0*%i);
 2.470968822383473b0-2.000225543972226b0*%i$
 
+block([numer:true], sinc(1));
+0.8414709848078965$
+
+block([numer:true], sinc(2 + 3*%i));
+ 0.4463290318402434-2.7539470277436475*%i$
+
+block([numer:true], float(sinc(0.0)));
+1.0$
+
+/* binary 64 subnormals */
+sinc(0.5000001*2.0^(-1075));
+1.0$
+
+sinc(expand(0.5000001*2.0^(-1075) * (1+%i)));
+1.0$
+
+/* mixed float & bigfloat */
+sinc(1.2 + 3.5b0*%i);
+2.886489912329489b0-3.423637846717706b0*%i$
+
 /* reflection */
 sinc(-x) - sinc(x);
 0$
