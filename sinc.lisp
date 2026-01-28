@@ -14,20 +14,34 @@
         (t nil)))
 
 (defun sinc-float (x)
-   (cond ((zerop1 x) (add 1 x)) ; the add 1 ... makes sinc(0.0) = 1.0 (not 1)
+ "Evaluate the sinc(x) function for float, bigfloat, or complex float or bigfloat input.
+ Return nil when x is not one of these types of numbers. Exceptions:
+(a) when x = 0, return 1 even when $numer is false
+(b) when $numer is true and x is a mnump number or a complex mnump number, convert x to
+    an IEEE float and perform floating‑point evaluation."
+  (cond
+    ;; Special case: sinc(0)
+    ((zerop1 x) (add 1 x)) ; the add 1 ... makes sinc(0.0) = 1.0 (not 1) amd sinc(0.0b0) = 1.0b0 (not 1)
+    (t
+     (multiple-value-bind (flag re im)
+         (complex-number-p x #'mnump)
+       (cond
+         ((not flag) nil) ;no floating evaluation possible: return nil
          (t
-           (multiple-value-bind (flag re im)
-            (complex-number-p x #'mnump)
-            ;; When flag and $numer are true, convert re and im to floats
-            (when (and flag $numer)
-               (setq re ($float re)
-                     im ($float im)))
-            ;; When either re or im is a float or bigfloat, do floating point evaluation
-            (cond ((and flag (or (float-or-bigfloat-p re) (float-or-bigfloat-p im)))
-                    (let ((z (bigfloat::to re im)))
-                        (maxima::to (bigfloat::/ (bigfloat::sin z) z))))
-                  ;; return nil the input isn't a float
-                  (t nil))))))
+          ;; when $numer is true, promote re & im to IEEE floats
+          (when $numer
+            (setq re ($float re)
+                  im ($float im)))
+          ;; If neither part is float/bigfloat, cannot evaluate: return nil
+          (cond
+            ((not (or (float-or-bigfloat-p re) (float-or-bigfloat-p im))) nil)
+            ;; real case--avoid complex number division. When x is a bigfloat, can't do (/ sin x) x)s
+            ((zerop im) (maxima::to (bigfloat::/ (bigfloat::sin re) re)))
+            ;; do floating-point complex evaluation; there is 
+            ;; no bigfloat::sinc. Maybe there should be, till then:
+            (t
+             (let ((z (bigfloat::to re im)))
+               (maxima::to (bigfloat::/ (bigfloat::sin z) z)))))))))))
 
 (def-simplifier sinc (x) 
    (cond ((zerop1 x) (add 1 x)) ; the add 1 ... makes sinc(0.0) = 1.0 (not 1)
