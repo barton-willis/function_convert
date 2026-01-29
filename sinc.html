@@ -42,15 +42,17 @@ ul.no-bullet {list-style: none}
 
 <dl class="def">
 <dt id="index-sinc"><span class="category">Function: </span><span><strong>sinc</strong> <em><var>x</var></em><a href='#index-sinc' class='copiable-anchor'> &para;</a></span></dt>
-<dd><p>The function <code>sinc</code> is defined by <code>sinc(x) = sin(x)/x</code>
-for <code><var>x</var> ≠ 0</code>, and by <code>sinc(0) = 1</code>, which makes
-<code>sinc</code> continuous at zero. This function is sometimes known
-as the <em>unnormalized</em> <code>sinc</code> function.
+<dd>
+<p>The function <code>sinc</code> is defined by <code>sinc(x) = sin(x)/x</code> for <code><var>x</var> ≠ 0</code>, and by <code>sinc(0) = 1</code>, 
+so that <code>sinc</code> is continuous at zero. This is sometimes called the <em>unnormalized</em> <code>sinc</code> function.
 </p>
-
-<p>When <code>%piargs</code> is true (the default), <code>sinc(<var>x</var>)</code>
-simplifies to an exact value when <var>x</var> is an explicit integer multiple of
-<code>pi</code>, <code>pi/4</code>, or <code>pi/6</code>.
+<p>When <code>%piargs</code> is true (the default), <code>sinc(<var>x</var>)</code> evaluates to an exact value when <var>x</var> is an 
+explicit integer multiple of <code>pi</code>, <code>pi/4</code>, or <code>pi/6</code>. For other nonzero symbolic arguments, 
+<code>sinc</code> does not simplify to <code>sin(x)/x</code>.
+</p>
+<p>For real or complex floating‑point arguments (double or big floats), <code>sinc</code> returns a floating‑point 
+value in rectangular form. When <code>numer</code> is true, <code>sinc</code> returns a floating‑point value in rectangular 
+form for all numeric arguments.
 </p>
 <div class="example">
 <pre class="example">(%i1) sinc(%pi);
@@ -60,6 +62,16 @@ simplifies to an exact value when <var>x</var> is an explicit integer multiple o
 
 (%i3) sinc(pi);
 (%o3) sinc(%pi)
+
+(%i4) sinc(1.0 + 5.0*%i);
+(%o4) 10.111782590680328 - 10.466747175403242 %i
+
+(%i5) sinc(1 + 5*%i);
+(%o5) sinc(5 %i + 1)
+
+(%i6) sinc(1 + 5*%i),numer;
+(%o6) 10.111782590680328 - 10.466747175403242 %i
+
 </pre></div>
 </dd></dl>
 

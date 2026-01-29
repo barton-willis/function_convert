@@ -4,15 +4,17 @@
 @end ifnotinfo
 
 @deffn Function sinc @var{x}
-The function @code{sinc} is defined by @code{sinc(x) = sin(x)/x}
-for @code{@var{x} ≠ 0}, and by @code{sinc(0) = 1}, which makes
-@code{sinc} continuous at zero. This function is sometimes known
-as the @emph{unnormalized} @code{sinc} function.
 
+The function @code{sinc} is defined by @code{sinc(x) = sin(x)/x} for @code{@var{x} ≠ 0}, and by @code{sinc(0) = 1}, 
+so that @code{sinc} is continuous at zero. This is sometimes called the @emph{unnormalized} @code{sinc} function.
 
-When @code{%piargs} is true (the default), @code{sinc(@var{x})}
-simplifies to an exact value when @var{x} is an explicit integer multiple of
-@code{pi}, @code{pi/4}, or @code{pi/6}.
+When @code{%piargs} is true (the default), @code{sinc(@var{x})} evaluates to an exact value when @var{x} is an 
+explicit integer multiple of @code{pi}, @code{pi/4}, or @code{pi/6}. For other nonzero symbolic arguments, 
+@code{sinc} does not simplify to @code{sin(x)/x}.
+
+For real or complex floating‑point arguments (double or big floats), @code{sinc} returns a floating‑point 
+value in rectangular form. When @code{numer} is true, @code{sinc} returns a floating‑point value in rectangular 
+form for all numeric arguments.
 
 @example
 (%i1) sinc(%pi);
@@ -22,6 +24,16 @@ simplifies to an exact value when @var{x} is an explicit integer multiple of
 
 (%i3) sinc(pi);
 (%o3) sinc(%pi)
+
+(%i4) sinc(1.0 + 5.0*%i);
+(%o4) 10.111782590680328 - 10.466747175403242 %i
+
+(%i5) sinc(1 + 5*%i);
+(%o5) sinc(5 %i + 1)
+
+(%i6) sinc(1 + 5*%i),numer;
+(%o6) 10.111782590680328 - 10.466747175403242 %i
+
 @end example
 @end deffn
 
