@@ -3,36 +3,26 @@
 @top Function sinc
 @end ifnotinfo
 
-@c  --- sinc ------------------------------------------------------------------
+@deffn Function sinc @var{x}
+The function @code{sinc} is defined by @code{sinc(x) = sin(x)/x}
+for @code{@var{x} ≠ 0}, and by @code{sinc(0) = 1}, which makes
+@code{sinc} continuous at zero. This function is sometimes known
+as the @emph{unnormalized} @code{sinc} function.
 
-@defun sinc (x)
-Return @code{sin(x)/x}.  The function @code{sinc(x)} is defined for all
-real and complex values of @var{x}.  At @var{x} = 0 the value is defined
-to be 1, corresponding to the limiting value of @code{sin(x)/x}.
 
-When @code{sinc} is applied to a symbolic expression, the result is the
-quotient @code{sin(x)/x}.  When @code{$numer} is @code{true} and the
-argument is a floating or complex floating number, @code{sinc} performs
-floating‑point evaluation.
-
-Examples:
+When @code{%piargs} is true (the default), @code{sinc(@var{x})}
+simplifies to an exact value when @var{x} is an explicit integer multiple of
+@code{pi}, @code{pi/4}, or @code{pi/6}.
 
 @example
-(%i1) sinc(%pi/3);
-(%o1) 3/(2 %pi)
+(%i1) sinc(%pi);
+(%o1) 0
 
-(%i2) sinc(1.2 - 4.5*%i);
-(%o2) 5.7043918199347985 + 7.802144269985125 %i
+(%i2) %piargs : false$
 
-(%i3) integrate(sinc(x), x);
-(%o3) expintegral_si(x)$
-
-(%i4) taylor(sinc(x), x, 0, 5);
-(%o4) 1 - x^2/6 + ...
-
-(%i5) powerseries(sinc(x), x, 0);
-(%o5) sum(((-1)^i2*x^(2*i2))/(2*i2+1)!,i2,0,inf)
+(%i3) sinc(pi);
+(%o3) sinc(%pi)
 @end example
+@end deffn
 
-@end defun
 
