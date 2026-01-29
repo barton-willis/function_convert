@@ -105,8 +105,11 @@ limit(sinc(x), x, minf);
 limit((sinc(x)-1)/x^2,x,0);
 -1/6$
 
- limit((sinc(x)-1 + x^2/6)/x^4,x,0);
- 1/120$
+limit((sinc(x)-1 + x^2/6)/x^4,x,0);
+1/120$
+
+limit(sinc(sin(x)),x,inf);
+ind$
 
 /* derivatives */
 diff(sinc(x), x);
