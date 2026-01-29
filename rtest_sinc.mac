@@ -130,6 +130,12 @@ expintegral_si(a*x)/a$
 rectform(sinc(a+%i*b));
 (cos(a)*b*sinh(b)+a*sin(a)*cosh(b))/(b^2+a^2)+(%i*(a*cos(a)*sinh(b)-sin(a)*b*cosh(b)))/(b^2+a^2)$
 
+ polarform(sinc(1 + %i));
+ %e^(%i*atan(((cos(1)*sinh(1))/2-(cosh(1)*sin(1))/2)
+                    /((cos(1)*sinh(1))/2+(cosh(1)*sin(1))/2)))
+ *sqrt(((cos(1)*sinh(1))/2+(cosh(1)*sin(1))/2)^2
+        +((cos(1)*sinh(1))/2-(cosh(1)*sin(1))/2)^2)$
+        
 /* sign */
 block([ans],
    assume(0 < x, x < %pi), 
