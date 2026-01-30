@@ -170,6 +170,11 @@ the function symbol."
   (let ((z (car x)))
     (div (ftake '%sin z) z)))
 
+(define-converter (%sin %sinc) (x)
+  "Convert sin(x) into x*sinc(x)."
+  (let ((z (car x)))
+    (mul z (ftake '%sinc z))))
+
 (define-converter (mfactorial %gamma) (x)
  "Convert x! into gamma(1+x)."
   (let ((z (car x))) (ftake '%gamma (add 1 z))))
@@ -331,3 +336,4 @@ the function symbol."
   "Convert hstep(x) into (1+signum(x))/2."
   (let ((z (car x)))
     (div (add 1 (ftake '%signum z)) 2)))
+
