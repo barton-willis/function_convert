@@ -152,6 +152,6 @@
 			        (t (setf sign '$pnz))))
 		nil)
 (putprop '%sinc 'sign-sinc 'sign-function)
-;; Tex support for sinc
 
+;; Tex support for sinc
 (defprop %sinc "\\sinc" texword)
