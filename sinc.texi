@@ -10,7 +10,7 @@ so that @code{sinc} is continuous at zero. This is sometimes called the @emph{un
 
 When @code{%piargs} is true (the default), @code{sinc(@var{x})} evaluates to an exact value when @var{x} is an 
 explicit integer multiple of @code{pi}, @code{pi/4}, or @code{pi/6}. For other nonzero symbolic arguments, 
-@code{sinc} does not simplify to @code{sin(x)/x}.
+@code{sinc} does not simplify to @code{sin(x)/x}. 
 
 For real or complex floating‑point arguments (double or big floats), @code{sinc} returns a floating‑point 
 value in rectangular form. When @code{numer} is true, @code{sinc} returns a floating‑point value in rectangular 

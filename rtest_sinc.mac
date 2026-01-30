@@ -138,11 +138,18 @@ rectform(sinc(a+%i*b));
         
 /* sign */
 block([ans],
-   assume(0 < x, x < %pi), 
+   assume(-%pi < x, x < %pi), 
    ans : [sign(sinc(x)), sign(sinc(-x))],
-   forget(0 < x, x < %pi),
+   forget(-%pi < x, x < %pi),
    ans);
 [pos, pos]$
+
+block([ans],
+   assume(-%pi <= x, x <= %pi), 
+   ans : [sign(sinc(x)), sign(sinc(-x))],
+   forget(-%pi <= x, x <= %pi),
+   ans);
+[pz, pz]$
 
 /* conjugate */
 block([ans],

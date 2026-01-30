@@ -115,9 +115,36 @@
 (setf (get '%sinc 'risplit-function) 'risplit-sinc)
 (putprop '%sinc 'risplit-sinc 'risplit-function)
 
-(defun sign-sinc (x)
-     (let ((z (cadr x)))
-      (sign (div (ftake '%sin z) z))))
+;; When  -%pi <= x & x <= %pi, this code sign(sinc(x)) = pos (when x # 0)
+;; and sign(sinc(x)) = pz otherwise. We don't attempt to find the sign for
+;; any other cases.
+(defun sign-sinc (e) ; e = sinc(x)
+     (let ((x (cadr e)) (y 0))
+       ;; When *complexsign* is true, find the rectangular form of 
+       ;; the argument to sin.
+       (when *complexsign* 
+          (setq x (risplit x))
+          (setq y (cdr x)
+                x (car x)))
+       (cond 
+             ;; When y = 0 and -%pi < x < %pi, sign(sinc(x)) = $pos
+             ((and (eql y 0)
+                   (eq t (mgrp x (mul -1 '$%pi))) 
+                   (eq t (mgrp '$%pi x)))
+                (setf sign '$pos))
+
+            ;; When y = 0 and -%pi <= x <= %pi, sign(sinc(x)) = $pz
+             ((and (eql y 0)
+                   (eq t (mgqp x (mul -1 '$%pi))) 
+                   (eq t (mgqp '$%pi x)))
+                (setf sign '$pz))
+           
+              ;; When *complexsign* is true & y # 0, set sign to complex.
+              ;; To test y # 0, we'll use (not (eql y 0)))
+              ((and *complexsign* (not (eql y 0)))
+                (setf sign '$complex))
+			        (t (setf sign '$pnz))))
+		nil)
 (putprop '%sinc 'sign-sinc 'sign-function)
 ;; Tex support for sinc
 
