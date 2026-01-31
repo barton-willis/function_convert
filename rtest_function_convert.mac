@@ -1,0 +1,105 @@
+/* [ erf = integral, erf = erfc, erf = erfi,
+erf = hypergeometric, erfc = erf, erfi = erf, gamma_incomplete = expand,
+genfact = gamma, hstep = signum, signum = hstep, sin = exp, sin = sin,
+sin = sinc, sinc = gamma, sinc = sin, sinh = exp, tan = sin, tanh = sinh,
+abs = signum, abs = sqrt, ^ = trigreduce, factorial = product,
+factorial = gamma]*/
+
+/* bad arguments */
+errcatch(function_convert());
+[]$
+
+errcatch(function_convert(false));
+[]$
+
+errcatch(function_convert(a,b));
+[]$
+
+errcatch(function_convert(a,b,c));
+[]$
+
+errcatch(function_convert(a+b,c));
+[]$
+
+/* log10 conversions */
+
+function_convert(log10 = log, log10(x));
+log(x)/log(10)$
+
+radcan(subst(x=100, function_convert(log10 = log, log10(x))));
+2$
+
+/* atan conversions */
+function_convert('atan = 'log, atan(x));
+-((%i*(log(%i*x+1)-log(1-%i*x)))/2)$
+
+is(function_convert('atan = 'log, atan(x)) = logarc(atan(x)));
+true$
+
+/* binomial conversions */
+function_convert(binomial = factorial, binomial(p,q));
+ p!/((p-q)!*q!)$
+
+ is(function_convert(binomial = factorial, binomial(p,q)) = makefact(binomial(p,q)));
+ true$
+
+/* cos to exp */
+function_convert('cos = 'exp, cos(x));
+(%e^(%i*x)+%e^-(%i*x))/2$
+
+demoivre(function_convert('cos = 'exp, cos(x)));
+cos(x)$
+
+function_convert('cos = 'exp, cos(x));
+(%e^(%i*x)+%e^-(%i*x))/2$
+
+function_convert('cos = 'exp, cos(x/5)^2);
+(%e^((%i*x)/5)+%e^-((%i*x)/5))^2/4$
+
+demoivre(function_convert('cos = 'exp, cos(x/5)^3));
+cos(x/5)^3$
+
+/* cosh to exp */
+function_convert(cosh = exp, cosh(x));
+(%e^x+%e^-x)/2$
+
+is(function_convert(cosh = exp, cosh(x)) = exponentialize(cosh(x)));
+true$
+
+/* csc to sin */
+function_convert('csc = 'sin, 1/csc(a+b));
+sin(a+b)$
+
+function_convert('csc = 'sin, sin(a+b)/csc(a+b));
+sin(a+b)^2$
+
+function_convert('csc = 'sin, (1+x)^23);
+(1+x)^23$
+
+/* erf to integral; Not sure how to tests this one...the integration variable is a gentemp. We'll trust that
+the result of function_convert is a integral nounform. */
+
+diff(function_convert(erf = integral, erf(x)),x);
+(2*%e^-x^2)/sqrt(%pi)$
+
+block([ans],
+  assume(x > 0),
+  ans : function_convert(erf = integral, erf(x)),
+  ans : ev(ans,nouns),
+  forget(x > 0),
+  ans);
+erf(x)$
+
+block([ans],
+  assume(x > 0),
+  ans : function_convert(erf = integral, erf(28*x)),
+  ans : ev(ans,nouns),
+  forget(x > 0),
+  ans);
+erf(28*x)$
+
+function_convert('erf = 'erfc, erf(x));
+1-erfc(x)$
+
+function_convert(['erf = 'erfc, 'efrc = 'erf], erf(x));
+erf(x)$
