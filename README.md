@@ -175,6 +175,7 @@ For historical reasons only, the original `sinc` package still resides in this r
 - [x] texinfo documentation for `sinc`
 - [x] regression tests for `sinc`
 - [x] TeX support for `sinc`
+- [ ] Update README.md to reflect the change from "=>" to "=".
 
 
 
