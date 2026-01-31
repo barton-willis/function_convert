@@ -1,7 +1,7 @@
 (in-package :maxima)
 
 ;;undone:  
-;;  (c) exponentialize (not sure what I had in mind)
+;;  (a) exponentialize--I think this requires altering the exponentialize function.
 
 (defun pure-constant-p (e)
 "Return true if `e` is either a Maxima number or a sum, product, or power whose 
@@ -13,7 +13,7 @@
 ;; For subnormal number, computing sin(x)/x directly seems to work OK. If that's
 ;; not true, we should trap for them and use a Taylor polynomial.
 (defun sinc-float (x)
- "Evaluate the sinc(x) function for float, bigfloat, or complex float or bigfloat input.
+ "Evaluate sinc(x) for float, bigfloat, or complex float or bigfloat input.
   Return nil when x is not one of these types of numbers. Exceptions:
     (a) when x = 0, return 1 even when $numer is false
     (b) when $numer is true and x is a mnump number or a complex mnump number, convert x to
@@ -22,7 +22,7 @@
     ;; Special case: sinc(0)
     ((zerop1 x)
        (if $numer 1.0
-           (add 1 x))) ; the add 1 ... makes sinc(0.0) = 1.0 (not 1) and sinc(0.0b0) = 1.0b0 (not 1)
+           (add 1 x))) ; the add 1 makes sinc(0.0) = 1.0 (not 1) and sinc(0.0b0) = 1.0b0 (not 1)
     (t
      (multiple-value-bind (flag re im)
          (complex-number-p x #'mnump)
@@ -36,7 +36,7 @@
           ;; If neither part is float or bigfloat, cannot evaluate: return nil
           (cond
             ((not (or (float-or-bigfloat-p re) (float-or-bigfloat-p im))) nil)
-            ;; real case--avoid complex number division. When x is a bigfloat, can't do (/ sin x) x)s
+            ;; real case--avoid complex number division. When x is a bigfloat, can't do (/ sin x) x)
             ((zerop1 im) (let ((z (bigfloat::to re))) 
                 (maxima::to (bigfloat::/ (bigfloat::sin z) z))))
             ;; do floating-point complex evaluation; there is 
@@ -114,15 +114,14 @@
   ((mexpt) sp2var ((mtimes) 2 *index)))
  *index 0 $inf))
 
-;; allow rectform(sinc(X)) to work correctly
-(defun risplit-sinc (x) ;rectangular form for a signum expression
+(defun risplit-sinc (x)
+"Return the rectangular form of sinc(x). The argument x is a list of the form 
+ ((%sinc) z).This function calls risplit on  sinc(z)." 
     (let ((z (cadr x)))
       (risplit (div (ftake '%sin z) z))))
-(setf (get '%sinc 'risplit-function) 'risplit-sinc)
 (putprop '%sinc 'risplit-sinc 'risplit-function)
 
-;; When  -%pi <= x & x <= %pi, this code sign(sinc(x)) = pos (when x # 0)
-;; and sign(sinc(x)) = pz otherwise. We don't attempt to find the sign for
+;; When  -%pi <= x & x <= %pi, this code handles sign(sinc(x)). We don't attempt to find the sign for
 ;; any other cases.
 (defun sign-sinc (e) ; e = sinc(x)
      (let ((x (cadr e)) (y 0))
