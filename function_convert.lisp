@@ -47,9 +47,9 @@ Each entry has the form:
         (declare (ignore fn))
         (when (or (endp names)
                   (member ($nounify from) normalized :test #'equal))
-          (mtell "~M => ~M : ~M ~%" from to doc)
+          (mtell "~M ~M ~M : ~M ~%" from *function-convert-infix-op* to doc)
           ;; Accumulate a Maxima-style list entry
-          (push (ftake '$=> from to) results))))
+          (push (ftake *function-convert-infix-op* from to) results))))
     ;; Return results in forward order
     (fapply 'mlist (nreverse results))))
 
@@ -76,8 +76,15 @@ the function symbol."
 ;;     is no such built-in conversion, do nothing.
 ;; (b) f => lambda(...) means “use this explicit conversion instead.”
 
-;; These binding powers makes a+b => c parse as (a+b) => c; it also makes '=>' left associative.
-($infix "=>" 80 80)
+;; To be consistent with substitute, we use “=” as the infix operator for semantic conversion. 
+;; Using “=” instead of “=>” preserves the freedom for users to define “=>” for other purposes. 
+;; The source code comments use “=>” as the infix operator--I think this notation clarifies the 
+;; source and target functions. Anyone wishing to rename the semantic conversion operator 
+;; may redefine *function-convert-infix-op*. Example:
+;;    ($infix "=>" 80 80)
+;;    (defmvar *function-convert-infix-op* '$=>)
+
+(defmvar *function-convert-infix-op* 'mequal)
 
 #| 
 (defmfun $function_convert (e &rest fun-subs-list)
@@ -111,8 +118,8 @@ the function symbol."
              (cond
                ((not (consp x))
                 (merror "Bad transformation (a mapatom): ~M" x))
-               ((not (eq (caar x) '$=>))
-                (merror "Bad transformation (missing =>): ~M" x))
+               ((not (eq (caar x) *function-convert-infix-op*))
+                (merror "Bad transformation (missing ~M): ~M" *function-convert-infix-op* x))
                ((not (or (symbolp (second x))
                          (stringp (second x))))
                 (merror "Bad transformation (invalid LHS): ~M" x))
