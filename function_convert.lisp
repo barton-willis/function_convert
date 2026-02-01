@@ -243,7 +243,7 @@ the function symbol."
 
 ;; double_factorial → gamma
 (define-function-converter (%genfact %gamma) (x)
-"Convert x!! to gamma form."
+"Convert x!! to gamma form. Set `gamma_expand` to false."
   (let ((a (car x)) (b (cadr x)) (c (caddr x))) ($makegamma (ftake '%genfact a b c))))
 
 (define-function-converter (%genfact $pochhammer) (x)
