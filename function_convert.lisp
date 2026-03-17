@@ -1199,6 +1199,10 @@ subexpression."
 
 (define-function-converter ((mplus $bessel_recursion) (:bessel $bessel_recursion)) (op x)
  :builtin
+ "Apply the three-term Bessel recursion to every Bessel term in a sum. This reduces every 
+  linear combination of Bessel functions with orders differing by an integer to a linear
+  combination of two Bessel functions using downward recursion."
+
  ;; To start `x` is a summand and `op` is addition. First we express `e` as the sum
  ;; of the members of `x`, then we map `bessel-order-downward-recurse` over all 
  ;; members of the :bessel class.
@@ -1207,6 +1211,32 @@ subexpression."
     (setq e (bessel-order-downward-recurse e fk)))
   ;; let's combine like bessel terms
   e))
+
+(let ((entries
+       '((%bessel_j . "Bessel J")
+         (%bessel_y . "Bessel Y")
+         (%bessel_i . "modified Bessel I")
+         (%bessel_k . "modified Bessel K")
+         (%hankel_1 . "Hankel H₁")
+         (%hankel_2 . "Hankel H₂"))))
+  (dolist (pair entries)
+    (let* ((fn   (car pair))
+           (name (cdr pair))
+           (key  (cons fn '$bessel_recursion))
+           (doc  (format nil
+                         "~a~a~a"
+                         (format nil
+                                 "Convert the ~a function using the three-term Bessel recursion. "
+                                 name)
+                         (format nil
+                                 "This reduces every linear combination of ~a functions "
+                                 name)
+                         (format nil
+                                 "with orders differing by an integer to a linear combination "
+                                 "of two ~a functions using downward recursion."
+                                 name))))
+      (setf (gethash key *function-convert-doc*) doc))))
+
    
 (defun bessel-order-downward-recurse (e op)
   ;; Assumptions: the argument `e` is a sum and `op` is a member of the bessel class
