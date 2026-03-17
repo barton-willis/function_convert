@@ -25,3 +25,6 @@
         "xgather"
     ]
 }
+
+"editor.acceptSuggestionOnCommitCharacter": false,
+"editor.quickSuggestions": false

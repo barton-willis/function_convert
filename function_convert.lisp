@@ -569,6 +569,7 @@ The function returns the symbol $done."
          (norm-from (first values))
          (norm-to   (second values))
 
+         (doc (gethash (converter-key norm-from norm-to) *function-convert-doc*))
          ;; Look up converter function
          (fn (gethash (converter-key norm-from norm-to)
                       *function-convert-hash*))
@@ -578,7 +579,7 @@ The function returns the symbol $done."
                            *built-in-converters*
                            :test #'equal)))
 
-    (cond ((null fn)
+    (cond ((and (null fn) (null doc))
        (mtell (intl:gettext "No converter defined for ~M ~M ~M ~%")
               from (get *function-convert-infix-op* 'op) to))
 
@@ -589,9 +590,8 @@ The function returns the symbol $done."
        (mtell (intl:gettext "Type: ~M~%")
               (if builtin? "built-in" "user-defined"))
 
-       (let ((doc (gethash (converter-key norm-from norm-to) *function-convert-doc*)))
-         (when doc
-           (mtell (intl:gettext "Docstring: ~M ~%") doc)))))
+       (when doc
+           (mtell (intl:gettext "Docstring: ~M ~%") doc))))
     '$done))
 
 
@@ -980,10 +980,34 @@ is first degree polynomial in %pi."
       (%coth (div (ftake '%cosh z) (ftake '%sinh z)))
       (t (ftake op z)))))
 
+
+;; This code handles the converters sin = exp, cos = exp, .... We'll call these "implicit" converters.
 (define-function-converter ((:trig %exp) ($trig %exp)) (op x)
   :builtin
  "Convert all trigonometric functions to exponential form."
   ($exponentialize (fapply op x)))
+
+;; Append implicit converter  documenation
+(let ((entries
+       '((%sin  . "sine")
+         (%cos  . "cosine")
+         (%tan  . "tangent")
+         (%cot  . "cotangent")
+         (%sec  . "secant")
+         (%csc  . "cosecant")
+         (%sinh . "hyperbolic sine")
+         (%cosh . "hyperbolic cosine")
+         (%tanh . "hyperbolic tangent")
+         (%coth . "hyperbolic cotangent")
+         (%sech . "hyperbolic secant")
+         (%csch . "hyperbolic cosecant"))))
+  (dolist (pair entries)
+    (let* ((fn   (car pair))
+           (name (cdr pair))
+           (key  (cons fn '%exp))
+           (doc  (format nil "Convert the ~a function to exponential form." name)))
+      (setf (gethash key *function-convert-doc*) doc))))
+
 
 (define-function-converter ((:hyperbolic %exp) ($hyperbolic %exp)) (op x)
   :builtin
@@ -1233,6 +1257,9 @@ subexpression."
   (maphash (lambda (a b) (declare (ignore b)) (print a)) *function-convert-hash*)
   (format t "~%Aliases:~%")
   (maphash (lambda (a b) (print `(a = ,a b = ,b))) *function-convert-hash-alias*))
+
+(defun show-doc ()
+  (maphash (lambda (a b) (print `(a= ,a b = ,b)))  *function-convert-doc*))
 
 
  
