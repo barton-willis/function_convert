@@ -391,20 +391,15 @@ li[2](zzz)+(psi[0](x/2)+psi[0](x/2+1/2))/2+log(2)$
 0$
 
 yyy  : expand(function_convert(bessel = bessel_recursion, xxx));
-(133*bessel_j(9,x))/x-(10949*bessel_j(10,x))/x^2
-                             -(494643*bessel_j(9,x))/x^3
-                             +(25032600*bessel_j(10,x))/x^4
-                             +(652889160*bessel_j(9,x))/x^5
-                             -(25265469600*bessel_j(10,x))/x^6
-                             -(425630822400*bessel_j(9,x))/x^7
-                             +(13538591539200*bessel_j(10,x))/x^8
-                             +(147984960614400*bessel_j(9,x))/x^9
-                             -(3990474193305600*bessel_j(10,x))/x^10
-                             -(26131169717452800*bessel_j(9,x))/x^11
-                             +(605522277590630400*bessel_j(10,x))/x^12
-                             +(1823775431314636800*bessel_j(9,x))/x^13
-                             -(36475508626292736000*bessel_j(10,x))/x^14
-                             +bessel_j(10,x)$
+-((85*bessel_j(15,x))/x)-(3245*bessel_j(14,x))/x^2
+                               +(166035*bessel_j(15,x))/x^3
+                               +(2995920*bessel_j(14,x))/x^4
+                               -(121047480*bessel_j(15,x))/x^5
+                               -(1142799840*bessel_j(14,x))/x^6
+                               +(39226360320*bessel_j(15,x))/x^7
+                               +(158155683840*bessel_j(14,x))/x^8
+                               -(4744670515200*bessel_j(15,x))/x^9
+                               +bessel_j(14,x)$
 
 is(abs(subst(x=107.0, xxx - yyy)) < max(subst(x=107.0, max(abs(xxx), abs(yyy))))/2^48);
 true$

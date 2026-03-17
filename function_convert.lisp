@@ -1185,7 +1185,7 @@ subexpression."
 
 (defun three-term-recusion-reduce (e fn op x n kmin)
   (let ((k (sub n kmin)))
-    (while (>= k 1)
+    (while (>= k 2)
        (setq e ($substitute (funcall fn op n x) e))
        (setq k (sub k 1))
        (setq n (sub n 1)))
