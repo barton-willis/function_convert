@@ -82,7 +82,6 @@
     (:hyperbolic  . (%sinh %cosh %tanh %sech %csch %coth))
     (:inv_trig    . (%asin %acos %atan %asec %acsc %acot))
     (:inv_hyperbolic . (%asinh %acosh %atanh %asech %acsch %acoth))
-    (:exp            . (mexpt))
     (:gamma_like     . (%gamma %beta %binomial %double_factorial mfactorial $pochhammer))
     (:bessel  . (%bessel_j %bessel_y %bessel_i %bessel_k %hankel_1 %hankel_2))
     (:algebraic . (mplus mtimes mexpt))
@@ -1019,7 +1018,7 @@ is first degree polynomial in %pi."
 "Convert all inverse trigonometric functions to logarithmic form."
   ($logarc (fapply op x)))
 
-(define-function-converter (:exp $trig) (op x)
+(define-function-converter (mexpt $trig) (op x)
   :builtin
   ($demoivre (fapply op x)))
 
