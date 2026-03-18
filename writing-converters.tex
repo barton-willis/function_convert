@@ -968,6 +968,30 @@ Third, and most importantly, it is difficult to use \ttq{defrule} to define a ru
 
 We end this comparison with one possible advantage of the \ttq{defrule} package over \funconvert. The \ttq{defrule} package provides several mechanisms, including \ttq{apply1}, \ttq{apply2}, and \ttq{applyb1}, that give the user control over the order in which rules are applied, whereas the \funconvert package uses a fixed scheme that is not under user control.
 
+\subsection{Design Summary}
+
+The function\_convert system provides a small, predictable method for
+rewriting expressions using alternative mathematical functions. Users may
+define converters explicitly, either in the Maxima language or in Common
+Lisp. The system does not use pattern matching; each converter applies
+only to the functions it is defined for, avoiding the ambiguity that can
+arise when patterns overlap or match more broadly than intended.
+
+Converters may be defined for individual functions or for entire classes
+of related functions. A class-level converter applies uniformly to every
+member of the class, and the system automatically creates the
+corresponding implied converters for the individual functions. This
+allows broad transformations to be expressed concisely while keeping the
+behavior of each converter transparent.
+
+All converters, explicit or implied, are stored in a central registry
+together with user-visible documentation strings. The registry makes it
+easy to inspect the available conversions, understand their behavior, and
+extend the system in a controlled way. The overall design emphasizes
+clarity, modularity, and user control rather than automatic or heuristic
+rewriting.
+
+
 
 \section{Glossary}
 
