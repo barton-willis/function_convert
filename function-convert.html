@@ -282,35 +282,9 @@ entire family of related functions.  The following class names may be
 used on the left-hand side of a rule such as <code>trig = exp</code>.
 </p>
 <dl compact="compact">
-<dt><span><code>trig</code></span></dt>
-<dd><p>The six trigonometric functions:
-<code>sin</code>, <code>cos</code>, <code>tan</code>, <code>sec</code>, <code>csc</code>, <code>cot</code>.
-</p>
-</dd>
-<dt><span><code>hyperbolic</code></span></dt>
-<dd><p>The six hyperbolic functions:
-<code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>sech</code>, <code>csch</code>, <code>coth</code>.
-</p>
-</dd>
-<dt><span><code>inv_trig</code></span></dt>
-<dd><p>The six inverse trigonometric functions:
-<code>asin</code>, <code>acos</code>, <code>atan</code>, <code>asec</code>, <code>acsc</code>, <code>acot</code>.
-</p>
-</dd>
-<dt><span><code>inv_hyperbolic</code></span></dt>
-<dd><p>The six inverse hyperbolic functions:
-<code>asinh</code>, <code>acosh</code>, <code>atanh</code>, <code>asech</code>, <code>acsch</code>, <code>acoth</code>.
-</p>
-</dd>
-<dt><span><code>exp</code></span></dt>
-<dd><p>The exponential operator <code>exp</code> (including expressions of the form
-<code>a^b</code>).
-</p>
-</dd>
-<dt><span><code>gamma_like</code></span></dt>
-<dd><p>Gamma-related special functions:
-<code>gamma</code>, <code>beta</code>, <code>binomial</code>, <code>double_factorial</code>,
-<code>factorial</code>, and <code>pochhammer</code>.
+<dt><span><code>algebraic</code></span></dt>
+<dd><p>Basic algebraic operators:
+<code>+</code>, <code>*</code>, and exponentiation.
 </p>
 </dd>
 <dt><span><code>bessel</code></span></dt>
@@ -319,9 +293,15 @@ used on the left-hand side of a rule such as <code>trig = exp</code>.
 <code>hankel_1</code>, <code>hankel_2</code>.
 </p>
 </dd>
-<dt><span><code>algebraic</code></span></dt>
-<dd><p>Basic algebraic operators:
-<code>+</code>, <code>*</code>, and exponentiation.
+<dt><span><code>gamma_like</code></span></dt>
+<dd><p>Gamma-related special functions:
+<code>gamma</code>, <code>beta</code>, <code>binomial</code>, <code>double_factorial</code>,
+<code>factorial</code>, and <code>pochhammer</code>.
+</p>
+</dd>
+<dt><span><code>hyperbolic</code></span></dt>
+<dd><p>The six hyperbolic functions:
+<code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>sech</code>, <code>csch</code>, <code>coth</code>.
 </p>
 </dd>
 <dt><span><code>inequation</code></span></dt>
@@ -329,11 +309,25 @@ used on the left-hand side of a rule such as <code>trig = exp</code>.
 <code>=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>/=</code>, <code>&gt;</code>, <code>&gt;=</code>.
 </p>
 </dd>
+<dt><span><code>inv_hyperbolic</code></span></dt>
+<dd><p>The six inverse hyperbolic functions:
+<code>asinh</code>, <code>acosh</code>, <code>atanh</code>, <code>asech</code>, <code>acsch</code>, <code>acoth</code>.
+</p>
+</dd>
+<dt><span><code>inv_trig</code></span></dt>
+<dd><p>The six inverse trigonometric functions:
+<code>asin</code>, <code>acos</code>, <code>atan</code>, <code>asec</code>, <code>acsc</code>, <code>acot</code>.
+</p>
+</dd>
 <dt><span><code>logarithmic</code></span></dt>
 <dd><p>The natural logarithm <code>log</code>.
+</p>
+</dd>
+<dt><span><code>trig</code></span></dt>
+<dd><p>The six trigonometric functions:
+<code>sin</code>, <code>cos</code>, <code>tan</code>, <code>sec</code>, <code>csc</code>, <code>cot</code>.
 </p></dd>
 </dl>
-
 
 <p>Multiple converters may be applied in sequence.  When the user supplies a list of converters, they are applied 
 from left to right.  When the system searches for a path automatically (via <code>find_conversion_path</code>), 

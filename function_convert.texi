@@ -60,48 +60,43 @@ entire family of related functions.  The following class names may be
 used on the left-hand side of a rule such as @code{trig = exp}.
 
 @table @code
-@item trig
-The six trigonometric functions:
-@code{sin}, @code{cos}, @code{tan}, @code{sec}, @code{csc}, @code{cot}.
-
-@item hyperbolic
-The six hyperbolic functions:
-@code{sinh}, @code{cosh}, @code{tanh}, @code{sech}, @code{csch}, @code{coth}.
-
-@item inv_trig
-The six inverse trigonometric functions:
-@code{asin}, @code{acos}, @code{atan}, @code{asec}, @code{acsc}, @code{acot}.
-
-@item inv_hyperbolic
-The six inverse hyperbolic functions:
-@code{asinh}, @code{acosh}, @code{atanh}, @code{asech}, @code{acsch}, @code{acoth}.
-
-@item exp
-The exponential operator @code{exp} (including expressions of the form
-@code{a^b}).
-
-@item gamma_like
-Gamma-related special functions:
-@code{gamma}, @code{beta}, @code{binomial}, @code{double_factorial},
-@code{factorial}, and @code{pochhammer}.
+@item algebraic
+Basic algebraic operators:
+@code{+}, @code{*}, and exponentiation.
 
 @item bessel
 The Bessel family:
 @code{bessel_j}, @code{bessel_y}, @code{bessel_i}, @code{bessel_k},
 @code{hankel_1}, @code{hankel_2}.
 
-@item algebraic
-Basic algebraic operators:
-@code{+}, @code{*}, and exponentiation.
+@item gamma_like
+Gamma-related special functions:
+@code{gamma}, @code{beta}, @code{binomial}, @code{double_factorial},
+@code{factorial}, and @code{pochhammer}.
+
+@item hyperbolic
+The six hyperbolic functions:
+@code{sinh}, @code{cosh}, @code{tanh}, @code{sech}, @code{csch}, @code{coth}.
 
 @item inequation
 Relational operators:
 @code{=}, @code{<}, @code{<=}, @code{/=}, @code{>}, @code{>=}.
 
+@item inv_hyperbolic
+The six inverse hyperbolic functions:
+@code{asinh}, @code{acosh}, @code{atanh}, @code{asech}, @code{acsch}, @code{acoth}.
+
+@item inv_trig
+The six inverse trigonometric functions:
+@code{asin}, @code{acos}, @code{atan}, @code{asec}, @code{acsc}, @code{acot}.
+
 @item logarithmic
 The natural logarithm @code{log}.
-@end table
 
+@item trig
+The six trigonometric functions:
+@code{sin}, @code{cos}, @code{tan}, @code{sec}, @code{csc}, @code{cot}.
+@end table
 
 Multiple converters may be applied in sequence.  When the user supplies a list of converters, they are applied 
 from left to right.  When the system searches for a path automatically (via @code{find_conversion_path}), 
