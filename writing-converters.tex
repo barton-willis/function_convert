@@ -27,7 +27,7 @@
 % --- General utilities ---
 
 \usepackage{mathtools}
-
+\usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{upgreek}
@@ -267,7 +267,7 @@ Cannot delete built-in converter erfc = erf.
 If a user-package properly includes a docstring for a converter, once the package is loaded, that documentation will be available via the function \ttq{describe\_converter}.  
 
 Again, a macro takes care of properly storing the user documentation. But there are converters that
-are specializations of a more general converter.  An example is the converter \ttq{ sin = exp} that expressions the sine function in exponential form. The  \ttq{ sin = exp} converter is a specialization of the converter that expresses all trigonometric functions in exponential form.  For such converters, the documentation must be manually defined. The next section explains this.
+are specializations of a more general converter.  An example is the converter \ttq{sin = exp} that expressions the sine function in exponential form. The  \ttq{sin = exp} converter is a specialization of the converter that expresses all trigonometric functions in exponential form.  For such converters, the documentation must be manually defined. The details are in Section \ref{subsec:implied-converters}
 
 
 \subsection{Class keys and class-based dispatch}
@@ -291,24 +291,57 @@ If the head operator of an expression belongs to the class \ttq{:algebraic}, tha
 \paragraph{The class table} The mapping from class keys to operators resides in the 
 global \ttq{*converter-class-table*}. This table is 
 
-\begin{maximabox}
-\begin{verbatim}
-(defparameter *converter-class-table*
-  '((:trig        . (%sin %cos %tan %sec %csc %cot))
-    (:hyperbolic  . (%sinh %cosh %tanh %sech %csch %coth))
-    (:inv_trig    . (%asin %acos %atan %asec %acsc %acot))
-    (:inv_hyperbolic . (%asinh %acosh %atanh %asech %acsch %acoth))
-    (:exp            . (mexpt))
-    (:gamma_like     . (%gamma %beta %binomial %double_factorial
-                        mfactorial $pochhammer))
-    (:bessel  . (%bessel_j %bessel_y %bessel_i %bessel_k %hankel_1 %hankel_2))
-    (:algebraic . (mplus mtimes mexpt))
-    (:inequation . (mequal mlessp mleqp mnotequal mgreaterp mgeqp
-                    $notequal $equal))
-    (:logarithmic . (%log)))
-  "Mapping from class keys to lists of operator symbols.")
-\end{verbatim}
-\end{maximabox}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Class key} & \textbf{Operators} \\
+\midrule
+
+\texttt{:algebraic} &
+\texttt{mplus}, \texttt{mtimes}, \texttt{mexpt} \\[2pt]
+
+\texttt{:bessel} &
+\texttt{\%bessel\_j}, \texttt{\%bessel\_y}, \texttt{\%bessel\_i},
+\texttt{\%bessel\_k}, \texttt{\%hankel\_1}, \texttt{\%hankel\_2} \\[2pt]
+
+\texttt{:exp} &
+\texttt{mexpt} \\[2pt]
+
+\texttt{:gamma\_like} &
+\texttt{\%gamma}, \texttt{\%beta}, \texttt{\%binomial},
+\texttt{\%double\_factorial}, \texttt{mfactorial},
+\texttt{\$pochhammer} \\[2pt]
+
+\texttt{:hyperbolic} &
+\texttt{\%sinh}, \texttt{\%cosh}, \texttt{\%tanh},
+\texttt{\%sech}, \texttt{\%csch}, \texttt{\%coth} \\[2pt]
+
+\texttt{:inequation} &
+\texttt{mequal}, \texttt{mlessp}, \texttt{mleqp}, \texttt{mnotequal},
+\texttt{mgreaterp}, \texttt{mgeqp}, \texttt{\$notequal}, \texttt{\$equal} \\[2pt]
+
+\texttt{:inv\_hyperbolic} &
+\texttt{\%asinh}, \texttt{\%acosh}, \texttt{\%atanh},
+\texttt{\%asech}, \texttt{\%acsch}, \texttt{\%acoth} \\[2pt]
+
+\texttt{:inv\_trig} &
+\texttt{\%asin}, \texttt{\%acos}, \texttt{\%atan},
+\texttt{\%asec}, \texttt{\%acsc}, \texttt{\%acot} \\[2pt]
+
+\texttt{:logarithmic} &
+\texttt{\%log} \\[2pt]
+
+\texttt{:trig} &
+\texttt{\%sin}, \texttt{\%cos}, \texttt{\%tan},
+\texttt{\%sec}, \texttt{\%csc}, \texttt{\%cot} \\
+
+\bottomrule
+\end{tabular}
+\caption{Class keys and their associated operators.}
+\end{table}
+
 Each entry associates a class key with the list of operators that belong to
 that class. The system assumes that \emph{an operator belongs to exactly one class}.
 This ensures unambiguous dispatch: when the converter system encounters an
@@ -364,13 +397,14 @@ class table and returns the unique class key containing the operator, or
   \end{verbatim}
 \end{maximabox}
 
-\paragraph{Implied converters}
+\subsection{Implied converters} \label{subsec:implied-converters}
+
 When a class-level converter is defined, Maxima automatically creates
 specialized converters for each member of the class. These are called
 \emph{implied converters}. For example, \ttq{sin = exp} is the implied
-converter corresponding to the class converter \ttq{:trig = exp}. Unlike
-its parent, the implied converter affects only the sine function:
-
+converter corresponding to the class-level converter \ttq{:trig = exp}.
+Unlike the class-level converter, the implied converter \ttq{sin = exp}
+affects only the sine function:
 \begin{maximabox}
 \begin{verbatim}
 (%i1) function_convert(sin = exp, sin(x) + cos(x));
@@ -386,17 +420,15 @@ trigonometric functions:
 (%o2) (%e^(%i*x)+%e^-(%i*x))/2-((%e^(%i*x)-%e^-(%i*x))*%i)/2
 \end{verbatim}
 \end{maximabox}
-
-Implied converters inherit the behavior of their parent converter but do
-not inherit its documentation. User-visible documentation for an implied
-converter must therefore be supplied explicitly. Documentation strings
-are stored in the hashtable \ttq{*function-convert-doc*}, and the source
-code includes several examples of how to add entries for implied
+Implied converters inherit the behavior of their class-level converter but
+do not inherit its documentation. User-visible documentation for an
+implied converter must therefore be supplied explicitly. Documentation for
+non‑implied converters is established automatically when the converter is
+created by the macro \ttq{define-function-converter}. All documentation
+strings are stored in the hashtable \ttq{*function-convert-doc*}, and the
+source code includes several examples of how to add entries for implied
 converters. The hashtable key for a converter \ttq{f = g} is the cons
 cell \ttq{(f . g)}.
-
-
-
 
 \subsection{Chaining multiple conversions}
 To apply two or more conversions, put the converters into a Maxima list; for example
