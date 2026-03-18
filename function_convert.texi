@@ -62,7 +62,7 @@ used on the left-hand side of a rule such as @code{trig = exp}.
 @table @code
 @item algebraic
 Basic algebraic operators:
-@code{+}, @code{*}, and exponentiation.
+@code{+}, @code{*}, and @code{^}
 
 @item bessel
 The Bessel family:
@@ -98,9 +98,13 @@ The six trigonometric functions:
 @code{sin}, @code{cos}, @code{tan}, @code{sec}, @code{csc}, @code{cot}.
 @end table
 
+Class keys classify operators, not expression types. For example, the class
+@code{algebraic} contains the operators @code{+}, @code{*}, and @code{^}.
+If the head operator of an expression belongs to the class \ttq{:algebraic}, that 
+does not imply that the expression itself is algebraic.
+
 Multiple converters may be applied in sequence.  When the user supplies a list of converters, they are applied 
-from left to right.  When the system searches for a path automatically (via @code{find_conversion_path}), 
-it uses a breadth-first search of the converter graph to find a shortest path.
+from left to right.  
 
 The converter system does not modify Maxima’s simplifier; all conversions occur only when explicitly requested 
 by the user.
@@ -135,7 +139,7 @@ See @ref{delete_all_user_converters}.
 
 @item @code{find_conversion_path(from, to)}  
 Construct a list of adjacent conversion steps forming a path from
-@code{from} to @code{to}.  
+@code{from} to @code{to}. 
 See @ref{find_conversion_path}.
 
 @item @code{register_converter(spec, fn, doc)}  
