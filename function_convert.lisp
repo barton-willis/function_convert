@@ -1222,20 +1222,14 @@ subexpression."
     (let* ((fn   (car pair))
            (name (cdr pair))
            (key  (cons fn '$bessel_recursion))
-           (doc  (format nil
-                         "~a~a~a"
-                         (format nil
-                                 "Convert the ~a function using the three-term Bessel recursion. "
-                                 name)
-                         (format nil
-                                 "This reduces every linear combination of ~a functions "
-                                 name)
-                         (format nil
-                                 "with orders differing by an integer to a linear combination "
-                                 "of two ~a functions using downward recursion."
-                                 name))))
+           (control
+            (concatenate 'string
+              "Convert the ~a function using the three-term Bessel recursion. "
+              "This reduces every linear combination of ~a functions "
+              "with orders differing by an integer to a linear combination "
+              "of two ~a functions using downward recursion."))
+           (doc (format nil control name name name)))
       (setf (gethash key *function-convert-doc*) doc))))
-
    
 (defun bessel-order-downward-recurse (e op)
   ;; Assumptions: the argument `e` is a sum and `op` is a member of the bessel class
@@ -1280,6 +1274,7 @@ subexpression."
 
 (define-function-converter (mexpt $trig) (op x)
   ($demoivre (fapply op x)))
+
 ;;; for debugging work only:
 (defun show-rules ()
   (format t "~%Converters:~%")
