@@ -1020,6 +1020,7 @@ is first degree polynomial in %pi."
 
 (define-function-converter (mexpt $trig) (op x)
   :builtin
+  "Rewrite complex exponetials using the De Moivre formula."
   ($demoivre (fapply op x)))
 
 (define-function-converter ((:trig $trig_tan_half_angle) ($trig $trig_tan_half_angle)) (op x)
@@ -1271,9 +1272,6 @@ subexpression."
                          (subfunmake fn subscripts (list (add (div 1 2) z))))
                  2) (ftake '%log 2)))
         (t e))))
-
-(define-function-converter (mexpt $trig) (op x)
-  ($demoivre (fapply op x)))
 
 ;;; for debugging work only:
 (defun show-rules ()
