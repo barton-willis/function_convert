@@ -1,12 +1,13 @@
 @setfilename function-convert.info
 @settitle Function Convert Manual
 
-@node function_convert_overview
+@node function-convert-overview
+
 @chapter Function Convert
 
 @section Overview
 
-The @code{function_convert} package rewrites all occurrences of one function in terms of another within a 
+The @code{function convert} package rewrites all occurrences of one function in terms of another within a 
 Maxima expression. Specifically, a @dfn{converter} is a rule @code{f = g} that specifies how calls to @code{f} should 
  expressed using the function @code{g}. Converters may express identities, special-function relations, 
  or any user-defined transformation that can be written as a Maxima function.
@@ -20,7 +21,7 @@ available conversions.
 Specifically, a rule has the form @code{f = g}, where @code{f} is the @emph{source function} and 
 the @emph{target function} @code{g} is either:
 
-@itemize @minus
+@itemize @bullet
 @item the name of a target function,
 @item a Maxima lambda expression, or
 @item the name of a Maxima function, possibly user-defined.
@@ -59,10 +60,12 @@ As we have seen, some conversion rules apply not only to a single function but t
 entire family of related functions.  The following class names may be
 used on the left-hand side of a rule such as @code{trig = exp}.
 
-@table @code
+
+@table @asis
+
 @item algebraic
 Basic algebraic operators:
-@code{+}, @code{*}, and @code{^}
+@code{+}, @code{*}, and 
 
 @item bessel
 The Bessel family:
@@ -80,7 +83,7 @@ The six hyperbolic functions:
 
 @item inequation
 Relational operators:
-@code{=}, @code{<}, @code{<=}, @code{/=}, @code{>}, @code{>=}.
+@code{=}, @code{<}, @code{<=}, @code{#}, @code{>}, @code{>=}.
 
 @item inv_hyperbolic
 The six inverse hyperbolic functions:
@@ -100,7 +103,7 @@ The six trigonometric functions:
 
 Class keys classify operators, not expression types. For example, the class
 @code{algebraic} contains the operators @code{+}, @code{*}, and @code{^}.
-If the head operator of an expression belongs to the class \ttq{:algebraic}, that 
+If the head operator of an expression belongs to the class @code{:algebraic}, that 
 does not imply that the expression itself is algebraic.
 
 Multiple converters may be applied in sequence.  When the user supplies a list of converters, they are applied 
@@ -119,37 +122,37 @@ The following functions make up the user-level interface to the converter system
 @itemize @bullet
 @item @code{function_convert(converters, expr)}  
 Apply one or more conversion rules to an expression.  
-See @ref{function_convert}.
+See @ref{function-convert}.
 
 @item @code{list_converters([name_1, name_2, ...])}  
 List all registered converters, optionally filtered by source function.  
-See @ref{list_converters}.
+See @ref{list-converters}.
 
 @item @code{describe_converter(f = g)}  
-Display detailed information about a specific converter.  
-See @ref{describe_converter}.
+Display information about a specific converter.  
+See @ref{describe-converter}.
 
 @item @code{delete_converter(rules)}  
 Delete one or more user-defined converters.  
-See @ref{delete_converter}.
+See @ref{delete-converter}.
 
 @item @code{delete_all_user_converters()}  
 Remove all user-defined converters at once.  
-See @ref{delete_all_user_converters}.
+See @ref{delete-all-user-converters}.
 
 @item @code{find_conversion_path(from, to)}  
 Construct a list of adjacent conversion steps forming a path from
 @code{from} to @code{to}. 
-See @ref{find_conversion_path}.
+See @ref{find-conversion-path}.
 
 @item @code{register_converter(spec, fn, doc)}  
 Register a new converter, optionally with an alias and documentation.  
-See @ref{register_converter}.
+See @ref{register-converter}.
 @end itemize
 
 
 
-@node function_convert
+@node function-convert
 @section function_convert
 @deffn Function function_convert (@var{rules}, @var{expr})
 
@@ -198,7 +201,7 @@ from left to right.
 
 @end deffn
 
-@node list_converters
+@node list-converters
 @section list_converters
 @deffn Function list_converters ([name_1, name_2, ...])
 
@@ -216,8 +219,7 @@ returned.
 psi = psi_half :  Apply the polygamma half-argument identity; see DLMF
      http://dlmf.nist.gov/5.5.E8
 
-inequation = zero_lhs :  Normalize an inequation `a op b` to the zero LHS form
-     `(a - b) op 0`.
+inequation = zero_lhs :  Normalize an inequation `a op b` to  `(a - b) op 0`.
 
 ...
 @end example
@@ -228,7 +230,7 @@ The list of converters is maintained internally and entries appear in an unspeci
 @end deffn
 
 
-@node describe_converter
+@node describe-converter
 @section describe_converter
 @defun describe_converter (rule)
 Describe the converter specified by @var{rule}, which must be a single
@@ -258,7 +260,7 @@ Bad transformation (missing =): a < b
 
 @end defun
 
-@node delete_converter
+@node delete-converter
 @section delete_converter
 @defun delete_converter (rules)
 
@@ -266,8 +268,8 @@ Delete one or more user-defined converters.  The argument @var{rules}
 may be either a single converter rule of the form @code{f = g} or a
 list of such rules.  The function returns the symbol @code{done}.
 
-If a listed converter is built-in, an informational message is printed
-and the converter is not deleted; for example:
+If a listed converter is built‑in, the system prints an informational message and 
+does not delete the converter; for example
 
 @example
 (%i1) delete_converter(sinc = sin);
@@ -308,7 +310,7 @@ Deleted converter ^ = radcan.
 
 @end defun
 
-@node delete_all_user_converters
+@node delete-all-user-converters
 @section delete_all_user_converters
 @defun delete_all_user_converters ()
 Delete all user-defined converters.  All built-in converters are
@@ -327,7 +329,7 @@ All user-defined converters deleted.
 @end defun
 
 
-@node find_conversion_path
+@node find-conversion-path
 @section find_conversion_path
 @deffn {Function} find_conversion_path (@var{from}, @var{to})
 
@@ -335,15 +337,15 @@ All user-defined converters deleted.
 Find a shortest conversion path from @var{from} to @var{to}.  The
 function performs a breadth-first search of the full converter graph
 and returns one such path, represented as a Maxima list of converter
-rules @code{f = g}.  If several shortest paths exist, one is chosen
+rules of the form @code{f = g}.  If several shortest paths exist, one is chosen
 according to the system's internal graph-traversal order; the choice
 among equal-length paths is not user-configurable.  All properly
 registered user-level converters may appear as links in a path.
 
 The function @code{find_conversion_path} does not perform any
 conversions.  To apply the path, call @code{function_convert} with the
-list returned by @code{find_conversion_path}.  If no path exists, the
-empty list @code{[]} is returned.
+list returned by @code{find_conversion_path}.  If no path exists, return
+the empty list @code{[]}.
 
 @example
 (%i1) path : find_conversion_path(sin, gamma);
@@ -355,7 +357,7 @@ empty list @code{[]} is returned.
 
 @end deffn
 
-@node register_converter
+@node register-converter
 @section register_converter
 @defun register_converter (rule, fn, &optional doc)
 Register a new converter.
@@ -366,11 +368,10 @@ the first case, the primary converter is @code{f = g} and it
 has no alias. In the second case, the first element of the list is 
  primary converter rule and the second element is its alias.
 
-If either the primary rule or the alias rule is not of the correct
-form, an error is signaled. If a converter from @code{f} to @code{g}
-already exists, an error is also signaled: built-in converters cannot
-be redefined, and redefining a user-defined converter is allowed, but
-a informational message is printed.
+The system signals an error when either the primary or alias rule has the wrong form.
+When a converter from @code{f}  @code{g} already exists, the system signals an error: 
+built-in converters are protected, and redefining a user-defined converter triggers an 
+informational message.
 
 The argument @code{fn} must be either a Maxima function or a Maxima
 lambda form; otherwise an error is signaled.  If a string @var{doc} is
@@ -443,7 +444,7 @@ Redefining converter sinc = fff
 The function @code{list_converters()} displays all registered converters, including user-defined ones, 
 together with a short description when available. The built-in converters are:
 
-@table @code
+@table @asis
 
 @item psi = psi_half
 Apply the polygamma half-argument identity.  See DLMF

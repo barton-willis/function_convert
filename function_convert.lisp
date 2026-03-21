@@ -1179,7 +1179,7 @@ subexpression."
   ;; inequations:
  (define-function-converter ((:inequation $zero_lhs) ($inequation $zero_lhs)) (op x)
    :builtin
-  "Normalize an inequation `a op b` to the zero LHS form `(a - b) op 0`."
+  "Normalize an inequation `a op b` to `(a - b) op 0`."
   (destructuring-bind (a b) x
     (ftake op (resimplify ($factor (sub a b))) 0)))
 

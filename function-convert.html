@@ -12,7 +12,7 @@
 <meta name="Generator" content="makeinfo">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<link href="#function_005fconvert_005foverview" rel="start" title="function_convert_overview">
+<link href="#function_002dconvert_002doverview" rel="start" title="function-convert-overview">
 <style type="text/css">
 <!--
 /* ------------------------------------------------------------
@@ -206,29 +206,30 @@ hr {
 <body lang="en">
 <h1 class="settitle" align="center">Function Convert Manual</h1>
 
-<div class="chapter" id="function_005fconvert_005foverview">
+<div class="chapter" id="function_002dconvert_002doverview">
 <div class="header">
 <p>
  &nbsp; </p>
 </div>
+
 <span id="Function-Convert"></span><h2 class="chapter">1 Function Convert</h2>
 
 <ul class="section-toc">
 <li><a href="#Overview" accesskey="1">Overview</a></li>
 <li><a href="#User_002dLevel-Functions" accesskey="2">User-Level Functions</a></li>
-<li><a href="#function_005fconvert" accesskey="3">function_convert</a></li>
-<li><a href="#list_005fconverters" accesskey="4">list_converters</a></li>
-<li><a href="#describe_005fconverter" accesskey="5">describe_converter</a></li>
-<li><a href="#delete_005fconverter" accesskey="6">delete_converter</a></li>
-<li><a href="#delete_005fall_005fuser_005fconverters" accesskey="7">delete_all_user_converters</a></li>
-<li><a href="#find_005fconversion_005fpath" accesskey="8">find_conversion_path</a></li>
-<li><a href="#register_005fconverter" accesskey="9">register_converter</a></li>
+<li><a href="#function_002dconvert" accesskey="3">function_convert</a></li>
+<li><a href="#list_002dconverters" accesskey="4">list_converters</a></li>
+<li><a href="#describe_002dconverter" accesskey="5">describe_converter</a></li>
+<li><a href="#delete_002dconverter" accesskey="6">delete_converter</a></li>
+<li><a href="#delete_002dall_002duser_002dconverters" accesskey="7">delete_all_user_converters</a></li>
+<li><a href="#find_002dconversion_002dpath" accesskey="8">find_conversion_path</a></li>
+<li><a href="#register_002dconverter" accesskey="9">register_converter</a></li>
 <li><a href="#Built_002din-Converters">Built-in Converters</a></li>
 </ul>
 <div class="section" id="Overview">
 <h3 class="section">1.1 Overview</h3>
 
-<p>The <code>function_convert</code> package rewrites all occurrences of one function in terms of another within a 
+<p>The <code>function convert</code> package rewrites all occurrences of one function in terms of another within a 
 Maxima expression. Specifically, a <em>converter</em> is a rule <code>f = g</code> that specifies how calls to <code>f</code> should 
  expressed using the function <code>g</code>. Converters may express identities, special-function relations, 
  or any user-defined transformation that can be written as a Maxima function.
@@ -242,10 +243,10 @@ available conversions.
 <p>Specifically, a rule has the form <code>f = g</code>, where <code>f</code> is the <em>source function</em> and 
 the <em>target function</em> <code>g</code> is either:
 </p>
-<ul class="no-bullet">
-<li>- the name of a target function,
-</li><li>- a Maxima lambda expression, or
-</li><li>- the name of a Maxima function, possibly user-defined.
+<ul>
+<li> the name of a target function,
+</li><li> a Maxima lambda expression, or
+</li><li> the name of a Maxima function, possibly user-defined.
 </li></ul>
 
 <span id="Specific-and-General-Conversion-Rules"></span><h4 class="subheading">Specific and General Conversion Rules</h4>
@@ -281,57 +282,62 @@ in the corresponding family.  Thus
 entire family of related functions.  The following class names may be
 used on the left-hand side of a rule such as <code>trig = exp</code>.
 </p>
+
 <dl compact="compact">
-<dt><span><code>algebraic</code></span></dt>
+<dt><span>algebraic</span></dt>
 <dd><p>Basic algebraic operators:
-<code>+</code>, <code>*</code>, and exponentiation.
+<code>+</code>, <code>*</code>, and 
 </p>
 </dd>
-<dt><span><code>bessel</code></span></dt>
+<dt><span>bessel</span></dt>
 <dd><p>The Bessel family:
 <code>bessel_j</code>, <code>bessel_y</code>, <code>bessel_i</code>, <code>bessel_k</code>,
 <code>hankel_1</code>, <code>hankel_2</code>.
 </p>
 </dd>
-<dt><span><code>gamma_like</code></span></dt>
+<dt><span>gamma_like</span></dt>
 <dd><p>Gamma-related special functions:
 <code>gamma</code>, <code>beta</code>, <code>binomial</code>, <code>double_factorial</code>,
 <code>factorial</code>, and <code>pochhammer</code>.
 </p>
 </dd>
-<dt><span><code>hyperbolic</code></span></dt>
+<dt><span>hyperbolic</span></dt>
 <dd><p>The six hyperbolic functions:
 <code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>sech</code>, <code>csch</code>, <code>coth</code>.
 </p>
 </dd>
-<dt><span><code>inequation</code></span></dt>
+<dt><span>inequation</span></dt>
 <dd><p>Relational operators:
-<code>=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>/=</code>, <code>&gt;</code>, <code>&gt;=</code>.
+<code>=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>#</code>, <code>&gt;</code>, <code>&gt;=</code>.
 </p>
 </dd>
-<dt><span><code>inv_hyperbolic</code></span></dt>
+<dt><span>inv_hyperbolic</span></dt>
 <dd><p>The six inverse hyperbolic functions:
 <code>asinh</code>, <code>acosh</code>, <code>atanh</code>, <code>asech</code>, <code>acsch</code>, <code>acoth</code>.
 </p>
 </dd>
-<dt><span><code>inv_trig</code></span></dt>
+<dt><span>inv_trig</span></dt>
 <dd><p>The six inverse trigonometric functions:
 <code>asin</code>, <code>acos</code>, <code>atan</code>, <code>asec</code>, <code>acsc</code>, <code>acot</code>.
 </p>
 </dd>
-<dt><span><code>logarithmic</code></span></dt>
+<dt><span>logarithmic</span></dt>
 <dd><p>The natural logarithm <code>log</code>.
 </p>
 </dd>
-<dt><span><code>trig</code></span></dt>
+<dt><span>trig</span></dt>
 <dd><p>The six trigonometric functions:
 <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>sec</code>, <code>csc</code>, <code>cot</code>.
 </p></dd>
 </dl>
 
+<p>Class keys classify operators, not expression types. For example, the class
+<code>algebraic</code> contains the operators <code>+</code>, <code>*</code>, and <code>^</code>.
+If the head operator of an expression belongs to the class <code>:algebraic</code>, that 
+does not imply that the expression itself is algebraic.
+</p>
 <p>Multiple converters may be applied in sequence.  When the user supplies a list of converters, they are applied 
-from left to right.  When the system searches for a path automatically (via <code>find_conversion_path</code>), 
-it uses a breadth-first search of the converter graph to find a shortest path.
+from left to right.  
 </p>
 <p>The converter system does not modify Maxima’s simplifier; all conversions occur only when explicitly requested 
 by the user.
@@ -348,44 +354,44 @@ constructing conversion paths, and registering or deleting user-defined converte
 <ul>
 <li> <code>function_convert(converters, expr)</code>  
 Apply one or more conversion rules to an expression.  
-See <a href="#function_005fconvert">function_convert</a>.
+See <a href="#function_002dconvert">function_convert</a>.
 
 </li><li> <code>list_converters([name_1, name_2, ...])</code>  
 List all registered converters, optionally filtered by source function.  
-See <a href="#list_005fconverters">list_converters</a>.
+See <a href="#list_002dconverters">list_converters</a>.
 
 </li><li> <code>describe_converter(f = g)</code>  
-Display detailed information about a specific converter.  
-See <a href="#describe_005fconverter">describe_converter</a>.
+Display information about a specific converter.  
+See <a href="#describe_002dconverter">describe_converter</a>.
 
 </li><li> <code>delete_converter(rules)</code>  
 Delete one or more user-defined converters.  
-See <a href="#delete_005fconverter">delete_converter</a>.
+See <a href="#delete_002dconverter">delete_converter</a>.
 
 </li><li> <code>delete_all_user_converters()</code>  
 Remove all user-defined converters at once.  
-See <a href="#delete_005fall_005fuser_005fconverters">delete_all_user_converters</a>.
+See <a href="#delete_002dall_002duser_002dconverters">delete_all_user_converters</a>.
 
 </li><li> <code>find_conversion_path(from, to)</code>  
 Construct a list of adjacent conversion steps forming a path from
-<code>from</code> to <code>to</code>.  
-See <a href="#find_005fconversion_005fpath">find_conversion_path</a>.
+<code>from</code> to <code>to</code>. 
+See <a href="#find_002dconversion_002dpath">find_conversion_path</a>.
 
 </li><li> <code>register_converter(spec, fn, doc)</code>  
 Register a new converter, optionally with an alias and documentation.  
-See <a href="#register_005fconverter">register_converter</a>.
+See <a href="#register_002dconverter">register_converter</a>.
 </li></ul>
 
 
 
 <hr>
 </div>
-<div class="section" id="function_005fconvert">
+<div class="section" id="function_002dconvert">
 <div class="header">
 <p>
-Next: <a href="#list_005fconverters" accesskey="n" rel="next">list_converters</a>, Up: <a href="#function_005fconvert_005foverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
+Next: <a href="#list_002dconverters" accesskey="n" rel="next">list_converters</a>, Up: <a href="#function_002dconvert_002doverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
 </div>
-<span id="function_005fconvert-1"></span><h3 class="section">1.3 function_convert</h3>
+<span id="function_005fconvert"></span><h3 class="section">1.3 function_convert</h3>
 <dl class="def">
 <dt id="index-function_005fconvert"><span class="category">Function: </span><span><strong>function_convert</strong> <em>(<var>rules</var>, <var>expr</var>)</em><a href='#index-function_005fconvert' class='copiable-anchor'> &para;</a></span></dt>
 <dd>
@@ -436,12 +442,12 @@ from left to right.
 
 <hr>
 </div>
-<div class="section" id="list_005fconverters">
+<div class="section" id="list_002dconverters">
 <div class="header">
 <p>
-Next: <a href="#describe_005fconverter" accesskey="n" rel="next">describe_converter</a>, Previous: <a href="#function_005fconvert" accesskey="p" rel="prev">function_convert</a>, Up: <a href="#function_005fconvert_005foverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
+Next: <a href="#describe_002dconverter" accesskey="n" rel="next">describe_converter</a>, Previous: <a href="#function_002dconvert" accesskey="p" rel="prev">function_convert</a>, Up: <a href="#function_002dconvert_002doverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
 </div>
-<span id="list_005fconverters-1"></span><h3 class="section">1.4 list_converters</h3>
+<span id="list_005fconverters"></span><h3 class="section">1.4 list_converters</h3>
 <dl class="def">
 <dt id="index-list_005fconverters"><span class="category">Function: </span><span><strong>list_converters</strong> <em>([name_1, name_2, ...])</em><a href='#index-list_005fconverters' class='copiable-anchor'> &para;</a></span></dt>
 <dd>
@@ -459,8 +465,7 @@ returned.
 psi = psi_half :  Apply the polygamma half-argument identity; see DLMF
      http://dlmf.nist.gov/5.5.E8
 
-inequation = zero_lhs :  Normalize an inequation `a op b` to the zero LHS form
-     `(a - b) op 0`.
+inequation = zero_lhs :  Normalize an inequation `a op b` to  `(a - b) op 0`.
 
 ...
 </pre></div>
@@ -472,12 +477,12 @@ inequation = zero_lhs :  Normalize an inequation `a op b` to the zero LHS form
 
 <hr>
 </div>
-<div class="section" id="describe_005fconverter">
+<div class="section" id="describe_002dconverter">
 <div class="header">
 <p>
-Next: <a href="#delete_005fconverter" accesskey="n" rel="next">delete_converter</a>, Previous: <a href="#list_005fconverters" accesskey="p" rel="prev">list_converters</a>, Up: <a href="#function_005fconvert_005foverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
+Next: <a href="#delete_002dconverter" accesskey="n" rel="next">delete_converter</a>, Previous: <a href="#list_002dconverters" accesskey="p" rel="prev">list_converters</a>, Up: <a href="#function_002dconvert_002doverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
 </div>
-<span id="describe_005fconverter-1"></span><h3 class="section">1.5 describe_converter</h3>
+<span id="describe_005fconverter"></span><h3 class="section">1.5 describe_converter</h3>
 <dl class="def">
 <dt id="index-describe_005fconverter"><span class="category">Function: </span><span><strong>describe_converter</strong> <em>(rule)</em><a href='#index-describe_005fconverter' class='copiable-anchor'> &para;</a></span></dt>
 <dd><p>Describe the converter specified by <var>rule</var>, which must be a single
@@ -509,12 +514,12 @@ Bad transformation (missing =): a &lt; b
 
 <hr>
 </div>
-<div class="section" id="delete_005fconverter">
+<div class="section" id="delete_002dconverter">
 <div class="header">
 <p>
-Next: <a href="#delete_005fall_005fuser_005fconverters" accesskey="n" rel="next">delete_all_user_converters</a>, Previous: <a href="#describe_005fconverter" accesskey="p" rel="prev">describe_converter</a>, Up: <a href="#function_005fconvert_005foverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
+Next: <a href="#delete_002dall_002duser_002dconverters" accesskey="n" rel="next">delete_all_user_converters</a>, Previous: <a href="#describe_002dconverter" accesskey="p" rel="prev">describe_converter</a>, Up: <a href="#function_002dconvert_002doverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
 </div>
-<span id="delete_005fconverter-1"></span><h3 class="section">1.6 delete_converter</h3>
+<span id="delete_005fconverter"></span><h3 class="section">1.6 delete_converter</h3>
 <dl class="def">
 <dt id="index-delete_005fconverter"><span class="category">Function: </span><span><strong>delete_converter</strong> <em>(rules)</em><a href='#index-delete_005fconverter' class='copiable-anchor'> &para;</a></span></dt>
 <dd>
@@ -522,8 +527,8 @@ Next: <a href="#delete_005fall_005fuser_005fconverters" accesskey="n" rel="next"
 may be either a single converter rule of the form <code>f = g</code> or a
 list of such rules.  The function returns the symbol <code>done</code>.
 </p>
-<p>If a listed converter is built-in, an informational message is printed
-and the converter is not deleted; for example:
+<p>If a listed converter is built‑in, the system prints an informational message and 
+does not delete the converter; for example
 </p>
 <div class="example">
 <pre class="example">(%i1) delete_converter(sinc = sin);
@@ -566,12 +571,12 @@ Deleted converter ^ = radcan.
 
 <hr>
 </div>
-<div class="section" id="delete_005fall_005fuser_005fconverters">
+<div class="section" id="delete_002dall_002duser_002dconverters">
 <div class="header">
 <p>
-Next: <a href="#find_005fconversion_005fpath" accesskey="n" rel="next">find_conversion_path</a>, Previous: <a href="#delete_005fconverter" accesskey="p" rel="prev">delete_converter</a>, Up: <a href="#function_005fconvert_005foverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
+Next: <a href="#find_002dconversion_002dpath" accesskey="n" rel="next">find_conversion_path</a>, Previous: <a href="#delete_002dconverter" accesskey="p" rel="prev">delete_converter</a>, Up: <a href="#function_002dconvert_002doverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
 </div>
-<span id="delete_005fall_005fuser_005fconverters-1"></span><h3 class="section">1.7 delete_all_user_converters</h3>
+<span id="delete_005fall_005fuser_005fconverters"></span><h3 class="section">1.7 delete_all_user_converters</h3>
 <dl class="def">
 <dt id="index-delete_005fall_005fuser_005fconverters"><span class="category">Function: </span><span><strong>delete_all_user_converters</strong> <em>()</em><a href='#index-delete_005fall_005fuser_005fconverters' class='copiable-anchor'> &para;</a></span></dt>
 <dd><p>Delete all user-defined converters.  All built-in converters are
@@ -592,12 +597,12 @@ All user-defined converters deleted.
 
 <hr>
 </div>
-<div class="section" id="find_005fconversion_005fpath">
+<div class="section" id="find_002dconversion_002dpath">
 <div class="header">
 <p>
-Next: <a href="#register_005fconverter" accesskey="n" rel="next">register_converter</a>, Previous: <a href="#delete_005fall_005fuser_005fconverters" accesskey="p" rel="prev">delete_all_user_converters</a>, Up: <a href="#function_005fconvert_005foverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
+Next: <a href="#register_002dconverter" accesskey="n" rel="next">register_converter</a>, Previous: <a href="#delete_002dall_002duser_002dconverters" accesskey="p" rel="prev">delete_all_user_converters</a>, Up: <a href="#function_002dconvert_002doverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
 </div>
-<span id="find_005fconversion_005fpath-1"></span><h3 class="section">1.8 find_conversion_path</h3>
+<span id="find_005fconversion_005fpath"></span><h3 class="section">1.8 find_conversion_path</h3>
 <dl class="def">
 <dt id="index-find_005fconversion_005fpath"><span class="category">Function: </span><span><strong>find_conversion_path</strong> <em>(<var>from</var>, <var>to</var>)</em><a href='#index-find_005fconversion_005fpath' class='copiable-anchor'> &para;</a></span></dt>
 <dd>
@@ -605,15 +610,15 @@ Next: <a href="#register_005fconverter" accesskey="n" rel="next">register_conver
 <p>Find a shortest conversion path from <var>from</var> to <var>to</var>.  The
 function performs a breadth-first search of the full converter graph
 and returns one such path, represented as a Maxima list of converter
-rules <code>f = g</code>.  If several shortest paths exist, one is chosen
+rules of the form <code>f = g</code>.  If several shortest paths exist, one is chosen
 according to the system&rsquo;s internal graph-traversal order; the choice
 among equal-length paths is not user-configurable.  All properly
 registered user-level converters may appear as links in a path.
 </p>
 <p>The function <code>find_conversion_path</code> does not perform any
 conversions.  To apply the path, call <code>function_convert</code> with the
-list returned by <code>find_conversion_path</code>.  If no path exists, the
-empty list <code>[]</code> is returned.
+list returned by <code>find_conversion_path</code>.  If no path exists, return
+the empty list <code>[]</code>.
 </p>
 <div class="example">
 <pre class="example">(%i1) path : find_conversion_path(sin, gamma);
@@ -627,12 +632,12 @@ empty list <code>[]</code> is returned.
 
 <hr>
 </div>
-<div class="section" id="register_005fconverter">
+<div class="section" id="register_002dconverter">
 <div class="header">
 <p>
-Previous: <a href="#find_005fconversion_005fpath" accesskey="p" rel="prev">find_conversion_path</a>, Up: <a href="#function_005fconvert_005foverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
+Previous: <a href="#find_002dconversion_002dpath" accesskey="p" rel="prev">find_conversion_path</a>, Up: <a href="#function_002dconvert_002doverview" accesskey="u" rel="up">Function Convert</a> &nbsp; </p>
 </div>
-<span id="register_005fconverter-1"></span><h3 class="section">1.9 register_converter</h3>
+<span id="register_005fconverter"></span><h3 class="section">1.9 register_converter</h3>
 <dl class="def">
 <dt id="index-register_005fconverter"><span class="category">Function: </span><span><strong>register_converter</strong> <em>(rule, fn, &amp;optional doc)</em><a href='#index-register_005fconverter' class='copiable-anchor'> &para;</a></span></dt>
 <dd><p>Register a new converter.
@@ -643,11 +648,10 @@ the first case, the primary converter is <code>f = g</code> and it
 has no alias. In the second case, the first element of the list is 
  primary converter rule and the second element is its alias.
 </p>
-<p>If either the primary rule or the alias rule is not of the correct
-form, an error is signaled. If a converter from <code>f</code> to <code>g</code>
-already exists, an error is also signaled: built-in converters cannot
-be redefined, and redefining a user-defined converter is allowed, but
-a informational message is printed.
+<p>The system signals an error when either the primary or alias rule has the wrong form.
+When a converter from <code>f</code>  <code>g</code> already exists, the system signals an error: 
+built-in converters are protected, and redefining a user-defined converter triggers an 
+informational message.
 </p>
 <p>The argument <code>fn</code> must be either a Maxima function or a Maxima
 lambda form; otherwise an error is signaled.  If a string <var>doc</var> is
@@ -723,25 +727,25 @@ Redefining converter sinc = fff
 together with a short description when available. The built-in converters are:
 </p>
 <dl compact="compact">
-<dt><span><code>psi = psi_half</code></span></dt>
+<dt><span>psi = psi_half</span></dt>
 <dd><p>Apply the polygamma half-argument identity.  See DLMF
 <a href="http://dlmf.nist.gov/5.5.E8">http://dlmf.nist.gov/5.5.E8</a>.
 </p>
 </dd>
-<dt><span><code>bessel = bessel_recursion</code></span></dt>
+<dt><span>bessel = bessel_recursion</span></dt>
 <dd><p>Rewrite Bessel functions using standard recursion identities.
 </p>
 </dd>
-<dt><span><code>inequation = zero_lhs</code></span></dt>
+<dt><span>inequation = zero_lhs</span></dt>
 <dd><p>Normalize an inequation <code>a op b</code> to the zero-LHS form
 <code>(a - b) op 0</code>.
 </p>
 </dd>
-<dt><span><code>exp = hyperbolic</code></span></dt>
+<dt><span>exp = hyperbolic</span></dt>
 <dd><p>Rewrite exponential functions in terms of hyperbolic functions.
 </p>
 </dd>
-<dt><span><code>gamma = binomial</code></span></dt>
+<dt><span>gamma = binomial</span></dt>
 <dd><p>Rewrite products of gamma functions into a binomial coefficient when
 possible.  This converter looks for subexpressions of the form
 <code>gamma(a+1)/(gamma(b+1)*gamma(a+1-b))</code> and replaces them with
@@ -752,7 +756,7 @@ binomial coefficient from expressions where the pattern is not present
 as an actual subexpression.
 </p>
 </dd>
-<dt><span><code>gamma = beta</code></span></dt>
+<dt><span>gamma = beta</span></dt>
 <dd><p>Rewrite products of gamma functions into beta functions when possible.
 This converter looks for subexpressions of the form
 <code>gamma(a)*gamma(b)/gamma(a+b)</code> and replaces them with
@@ -763,11 +767,11 @@ or <code>gamma(b)</code> individually, nor does it attempt to derive
 actual subexpression.
 </p>
 </dd>
-<dt><span><code>gamma_like = gamma</code></span></dt>
+<dt><span>gamma_like = gamma</span></dt>
 <dd><p>Normalize gamma-like functions to <code>gamma</code>.
 </p>
 </dd>
-<dt><span><code>hyperbolic = hyperbolic_tanh_half_angle</code></span></dt>
+<dt><span>hyperbolic = hyperbolic_tanh_half_angle</span></dt>
 <dd><p>Rewrite hyperbolic functions in terms of the tanh half-angle substitution
 <code>u = tanh(z/2)</code>, producing rational functions of <code>u</code>:
 </p><div class="display">
@@ -780,7 +784,7 @@ coth(z) = (1 + u^2) / (2 u)
 </pre></div>
 
 </dd>
-<dt><span><code>trig = trig_tan_half_angle</code></span></dt>
+<dt><span>trig = trig_tan_half_angle</span></dt>
 <dd><p>Rewrite trigonometric functions in terms of the tangent half-angle
 substitution <code>t = tan(z/2)</code>, producing rational functions of
 <code>t</code>:
@@ -794,133 +798,133 @@ cot(z) = (1 - t^2) / (2 t)
 </pre></div>
 
 </dd>
-<dt><span><code>exp = trig</code></span></dt>
+<dt><span>exp = trig</span></dt>
 <dd><p>Rewrite exponential functions in terms of trigonometric functions.
 </p>
 </dd>
-<dt><span><code>inverse_trig = log</code></span></dt>
+<dt><span>inverse_trig = log</span></dt>
 <dd><p>Convert inverse trigonometric functions to logarithmic form.
 </p>
 </dd>
-<dt><span><code>hyperbolic = exp</code></span></dt>
+<dt><span>hyperbolic = exp</span></dt>
 <dd><p>Convert hyperbolic functions to exponential form.
 </p>
 </dd>
-<dt><span><code>trig = exp</code></span></dt>
+<dt><span>trig = exp</span></dt>
 <dd><p>Convert trigonometric functions to exponential form.
 </p>
 </dd>
-<dt><span><code>trig = sin_cos</code></span></dt>
+<dt><span>trig = sin_cos</span></dt>
 <dd><p>Convert all six trigonometric functions to <code>sin</code>/<code>cos</code> form.
 </p>
 </dd>
-<dt><span><code>gamma = sin</code></span></dt>
+<dt><span>gamma = sin</span></dt>
 <dd><p>Apply the identity <code>gamma(x)*gamma(1-x) = %pi/sin(%pi*x)</code>.
 </p>
 </dd>
-<dt><span><code>trig = normalize_trig_argument</code></span></dt>
+<dt><span>trig = normalize_trig_argument</span></dt>
 <dd><p>Normalize the argument of trigonometric functions when the argument is a
 first-degree polynomial in <code>%pi</code>.
 </p>
 </dd>
-<dt><span><code>hstep = signum</code></span></dt>
+<dt><span>hstep = signum</span></dt>
 <dd><p>Convert <code>hstep(x)</code> into <code>(1 + signum(x))/2</code>.
 </p>
 </dd>
-<dt><span><code>signum = hstep</code></span></dt>
+<dt><span>signum = hstep</span></dt>
 <dd><p>Convert <code>signum(x)</code> into <code>2*hstep(x) - 1</code>.
 </p>
 </dd>
-<dt><span><code>abs = sqrt</code></span></dt>
+<dt><span>abs = sqrt</span></dt>
 <dd><p>Convert <code>abs(x)</code> into <code>sqrt(x^2)</code>.  When <code>radexpand</code> is
 true, this is simplified back to <code>abs(x)</code>.
 </p>
 </dd>
-<dt><span><code>signum = abs</code></span></dt>
+<dt><span>signum = abs</span></dt>
 <dd><p>Convert subexpressions of the form <code>X*signum(X)</code> into <code>abs(X)</code>.
 This converter does not rewrite <code>signum(X)</code> itself, since
 <code>X*signum(X)</code> is not a subexpression of <code>signum(X)</code>.
 </p>
 </dd>
-<dt><span><code>abs = signum</code></span></dt>
+<dt><span>abs = signum</span></dt>
 <dd><p>Convert <code>abs(x)</code> into <code>conjugate(x)*signum(x)</code>.
 </p>
 </dd>
-<dt><span><code>erf = hypergeometric</code></span></dt>
+<dt><span>erf = hypergeometric</span></dt>
 <dd><p>Convert <code>erf(x)</code> into
 <code>(2*x/sqrt(%pi))*hypergeometric([1/2],[3/2],-x^2)</code>.
 </p>
 </dd>
-<dt><span><code>erf = integral</code></span></dt>
+<dt><span>erf = integral</span></dt>
 <dd><p>Convert <code>erf(x)</code> into an integral representation.
 </p>
 </dd>
-<dt><span><code>erfc = erf</code></span></dt>
+<dt><span>erfc = erf</span></dt>
 <dd><p>Convert <code>erfc(x)</code> into <code>1 - erf(x)</code>.
 </p>
 </dd>
-<dt><span><code>erf = erfc</code></span></dt>
+<dt><span>erf = erfc</span></dt>
 <dd><p>Convert <code>erf(x)</code> into <code>1 - erfc(x)</code>.
 </p>
 </dd>
-<dt><span><code>erf = erfi</code></span></dt>
+<dt><span>erf = erfi</span></dt>
 <dd><p>Convert <code>erf(x)</code> into <code>i*erfi(-i*x)</code>.
 </p>
 </dd>
-<dt><span><code>erfi = erf</code></span></dt>
+<dt><span>erfi = erf</span></dt>
 <dd><p>Convert <code>erfi(x)</code> into <code>-i*erf(i*x)</code>.
 </p>
 </dd>
-<dt><span><code>^ = trigreduce</code></span></dt>
+<dt><span>^ = trigreduce</span></dt>
 <dd><p>Convert integer powers of trigonometric functions to a Fourier sum.
 </p>
 </dd>
-<dt><span><code>gamma_incomplete = expand</code></span></dt>
+<dt><span>gamma_incomplete = expand</span></dt>
 <dd><p>Expand incomplete gamma functions.
 </p>
 </dd>
-<dt><span><code>atan = log</code></span></dt>
+<dt><span>atan = log</span></dt>
 <dd><p>Convert <code>atan(x)</code> to logarithmic form.
 </p>
 </dd>
-<dt><span><code>factorial = product</code></span></dt>
+<dt><span>factorial = product</span></dt>
 <dd><p>Convert <code>n!</code> to <code>product(g,g,1,n)</code>.
 </p>
 </dd>
-<dt><span><code>binomial = factorial</code></span></dt>
+<dt><span>binomial = factorial</span></dt>
 <dd><p>Convert <code>binomial(n,k)</code> to factorial form.
 </p>
 </dd>
-<dt><span><code>log10 = log</code></span></dt>
+<dt><span>log10 = log</span></dt>
 <dd><p>Convert <code>log10(x)</code> into <code>log(x)/log(10)</code>.
 </p>
 </dd>
-<dt><span><code>genfact = pochhammer</code></span></dt>
+<dt><span>genfact = pochhammer</span></dt>
 <dd><p>Convert <code>genfact</code> to <code>pochhammer</code> form.
 </p>
 </dd>
-<dt><span><code>tanh = sinh</code></span></dt>
+<dt><span>tanh = sinh</span></dt>
 <dd><p>Convert <code>tanh(x)</code> into <code>sinh(x)/cosh(x)</code>.
 </p>
 </dd>
-<dt><span><code>tan = sin</code></span></dt>
+<dt><span>tan = sin</span></dt>
 <dd><p>Convert <code>tan(x)</code> into <code>sin(x)/cos(x)</code>.
 </p>
 </dd>
-<dt><span><code>csc = sin</code></span></dt>
+<dt><span>csc = sin</span></dt>
 <dd><p>Convert <code>csc(x)</code> into <code>1/sin(x)</code>.
 </p>
 </dd>
-<dt><span><code>sin = sinc</code></span></dt>
+<dt><span>sin = sinc</span></dt>
 <dd><p>Convert <code>sin(x)</code> into <code>x*sinc(x)</code>.
 </p>
 </dd>
-<dt><span><code>sinc = gamma</code></span></dt>
+<dt><span>sinc = gamma</span></dt>
 <dd><p>Convert <code>sinc(x)</code> into
 <code>1/(gamma(1+x/%pi)*gamma(1-x/%pi))</code>.
 </p>
 </dd>
-<dt><span><code>sinc = sin</code></span></dt>
+<dt><span>sinc = sin</span></dt>
 <dd><p>Convert <code>sinc(x)</code> into <code>sin(x)/x</code>.
 </p>
 </dd>

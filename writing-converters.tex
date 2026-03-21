@@ -197,20 +197,13 @@ This use of the infix operator \ttq{=} to define a rule is similar to its use in
 \subsection{Algorithm and implementation}
 \label{sec:algorithm}
 
-The function \ttq{function-convert} recursively traverses the expression tree 
-and replaces function calls according to well-defined
-rules.  In that sense it is straightforward code of a kind repeated
-many times in Maxima.  It is not a pattern matcher or a general
-rewrite engine.
+The top-level function \ttq{function\_convert} verifies that each converter has the required form, 
+resolves any aliases, and then calls the worker function \ttq{function-convert}. The worker 
+recursively traverses the expression tree and replaces function calls according to fixed rules. This is a common pattern in Maxima: a tree walk with a local transformation at each node. It is not a pattern matcher and not a general rewrite engine; that is, transformations are hard-coded rather than expressed as rewrite rules, and the shapes of expressions are not matched against declarative patterns.
 
-Specifically, \ttq{function-convert} performs a \emph{preorder} (root-first, left-to-right) traversal of the expression tree: each node is visited before its children. When the traversal reaches an atom, it returns immediately and no converter is applied. For non-atomic expressions, the converter is not applied at the moment the node is visited. Instead, the converter is applied only \emph{after} all arguments have been recursively converted.
+Specifically, \ttq{function-convert} walks the expression tree in preorder (root-first, left-to-right). When an atom is encountered, it is returned immediately and no converter is applied. For non-atomic expressions, the converter itself is applied only after the arguments have been recursively converted. Thus the traversal is top-down, while the transformation is effectively bottom-up.
 
-This yields a hybrid order: the traversal is top--down, but converter
-application is bottom--up.  For example, in the expression
-\ttq{a + b*c}, the converter is applied first to \ttq{b*c} and only
-then to the sum.
-
-We can illustrate this scheme with a rule  \ttq{algebraic = boxed} that
+For example, in the expression \ttq{a + b*c}, the subexpression \ttq{b*c} is converted before the enclosing sum is processed. We can illustrate this scheme with a rule  \ttq{algebraic = boxed} that
 wraps every subexpression whose operator is \ttq{+}, \ttq{*}, or
 \ttq{\^{}} in a consecutively numbered box.  This rule is not built-in to the 
 \funconvert package, but it can be written in just a few lines of code; for this code, 
@@ -227,7 +220,7 @@ see Section~\ref{sec:classkey}. Two examples:
 \end{maximabox}
 \noindent Two items to note: Maxima reorders commutative operands during simplification; in particular \ttq{c+d}
 prints as \ttq{d+c}. Also since \ttq{algebraic} is a Maxima option variable (default \ttq{false}),
-it is necessary to quote the source function for this converter. Notice that individual atoms are not boxed --- this is due to the policy that when the traversal reaches an atom, no converter is called and
+it is necessary to quote the source function for this converter. Notice that individual atoms are not boxed --- again, this is due to the policy that when the traversal reaches an atom, no converter is called and
 the atom is returned immediately.
 
 
@@ -767,7 +760,8 @@ There are several possible strategies; here we choose to apply \ttq{radcan} only
 \paragraph{The Maxima function}
 We begin by constructing a Maxima function that accepts the list of factors in a product, partitions them into constant and nonconstant terms, multiplies each sublist, applies \ttq{radcan} to the constant product, and finally returns the product of the two results.
 
-Because this converter applies to a \emph{product}, the primary source function is multiplication, \ttq{*}. We name the target function \ttq{radcan\_constant}. At some risk of overloading the name, we also name the Maxima function that performs the conversion \ttq{radcan\_constant}. Since the converter must accept an arbitrary number of arguments, its signature must be \ttq{radcan\_constant([e])}.
+Because this converter applies to a \emph{product}, the primary source function is multiplication, \ttq{*}. We name the target function \ttq{radcan\_constant}. At some risk of overloading the name, we also name the Maxima function that performs the conversion \ttq{radcan\_constant}. Since the converter must accept an arbitrary number of arguments, its signature must be \ttq{radcan\_constant([e])}, not
+\ttq{radcan\_constant(e)}.
 
 A straightforward implementation is
 
@@ -825,9 +819,8 @@ Suppose we redefine \ttq{radcan\_constant} so that it applies \ttq{radcan} to th
 (%o8) (2^(5/3)*7^(2/3)*a*log(x^2))/log(x) + 28
 \end{verbatim}
 \end{maximabox}
-
 \noindent
-Nothing changes --- yet. For the new definition to take effect, we must \emph{re-register} the converter:
+Output \ttq{(\%o8)} shows that the updated definition has not taken effect. To update the converter, we must \emph{re-register} it:
 
 \begin{maximabox}
 \begin{verbatim}
@@ -1039,7 +1032,7 @@ correctly:
 \end{maximabox}
 \noindent This happens because the converter maps over the arguments of the sum
 and encounters only atoms.  By the traversal rules, it returns each
-atom immediately, so the converter ultimately receives the entire
+atom immediately, so \ttq{integrate} ultimately receives the entire
 expression \ttq{x\^{}2+1}.  The call to \texttt{integrate} therefore
 produces a proper antiderivative.
 
@@ -1052,7 +1045,7 @@ In contrast:
 \end{verbatim}
 \end{maximabox}
 \noindent Here the return-immediately-for-an-atom rule applies at the root, so
-the converter is never invoked.  The result is simply the original
+the converter is never called.  The result is simply the original
 expression, not an antiderivative.
 
 A more striking illustration comes from comparing an unexpanded product
@@ -1110,7 +1103,7 @@ First, a \ttq{kill(all)} removes all rules defined by \ttq{defrule}, and that ma
 Second, the \ttq{defrule} package depends on a large assortment of auxiliary function names that can be hard to remember, and it lacks a self‑documentation feature.
 
 
-Third, and most importantly, it is difficult to use \ttq{defrule} to define a rule that must match two or more terms in a sum or product. The \funconvert package has several converters that do exactly this. These converters often rely internally on \ttq{ratsubst} to perform semantic substitutions --- something that is difficult for a rule defined by \ttq{defrule} to accomplish. An example is the built-in rule that applies the identity \(\Gamma(z)\Gamma(1-z)=\uppi/\sin(\uppi z)\) . The rule must scan a product and look for a pair of gamma functions whose arguments sum to one. Doing this with \ttq{defrule} is difficult to impossible, but it can be done using \funconvert,  as we saw in Section~\ref{sec:alias_system}.
+Third, and most importantly, it is difficult to use \ttq{defrule} to define a rule that must match two or more terms in a sum or product. The \funconvert package has several converters that do exactly this. These converters often rely internally on \ttq{ratsubst} to perform semantic substitutions --- something that is difficult for a rule defined by \ttq{defrule} to accomplish. An example is the built-in rule that applies the identity \(\Gamma(z)\Gamma(1-z)=\uppi/\sin(\uppi z)\) . The rule must scan a product and look for a pair of gamma functions whose arguments sum to one. Doing this with \ttq{defrule} is difficult to impossible, but it can be done using \ttq{function\_convert},  as we saw in Section~\ref{sec:alias_system}.
 
 We end this comparison with one possible advantage of the \ttq{defrule} package over \funconvert. The \ttq{defrule} package provides several mechanisms, including \ttq{apply1}, \ttq{apply2}, and \ttq{applyb1}, that give the user control over the order in which rules are applied, whereas the \funconvert package uses a fixed scheme that is not under user control.
 
