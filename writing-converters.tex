@@ -57,7 +57,6 @@
 
 \usepackage{tcolorbox}
 \tcbuselibrary{skins, breakable, listings}
-
 \newenvironment{maximabox}
   {\begin{tcolorbox}[
       breakable,
@@ -75,8 +74,10 @@
       after skip=14pt
     ]}
   {\end{tcolorbox}}
+  
+  
 
-\usepackage{tcolorbox}
+%\usepackage{tcolorbox}
 
 \newtcolorbox{notebox}{
   colback=gray!5,
@@ -740,7 +741,7 @@ Maxima’s \ttq{radcan} function simplifies expressions involving multivalued fu
 (%i1) domain : complex$
 
 (%i2) log(x^2);
-(%o2) log
+(%o2) log(x^2)
 
 (%i3) xxx : log(x^2)/log(x);
 (%o3) log(x^2)/log(x)
@@ -788,7 +789,7 @@ register_converter("*" = radcan_constant, radcan_constant,
 \end{maximabox}
 
 \paragraph{Testing the converter}
-To demonstrate that the converter does \emph{not} simplify the quotient $\log(x^2)/\log(x)$, we include such a factor in a larger product and set the domain to \ttq{complex}:
+To demonstrate that the converter does \emph{not} simplify the quotient $\log(x^2)/\log(x)$, we include such a factor in a product and set the domain to \ttq{complex}:
 
 \begin{maximabox}
 \begin{verbatim}
@@ -806,7 +807,8 @@ To demonstrate that the converter does \emph{not} simplify the quotient $\log(x^
 \end{maximabox}
 
 \noindent
-In \%o5, \ttq{radcan} simplifies the quotient of logarithms to $2$. In contrast, the converter \ttq{"*" = radcan\_constant} preserves the quotient, as intended.
+In \ttq{(\%o5)}, \ttq{radcan} simplifies the quotient of logarithms to $2$. In contrast, the converter \ttq{"*" = radcan\_constant} preserves the quotient, as intended.
+
 
 \paragraph{A subtle point: redefining a converter}
 Suppose we redefine \ttq{radcan\_constant} so that it applies \ttq{radcan} to the \emph{entire} product:
@@ -835,6 +837,23 @@ Redefining converter mtimes mequal radcan_constant
 
 \noindent
 When a converter is registered, the package stores a lambda form of the converter function in an internal hashtable. Redefining the Maxima function does \emph{not} update the stored lambda. Therefore, whenever a converter function is changed, the converter must be re-registered so that the stored lambda is replaced.
+\paragraph{Efficiency}
+
+Generally, it is more efficient in Maxima to add or multiply a list of expressions en masse 
+using \ttq{xreduce} or \ttq{tree\_reduce} instead of accumulating the sum or product one 
+term at a time as does \ttq{radcan\_constant}. Here is a version that uses \ttq{xreduce}:
+\begin{maximabox}
+\begin{verbatim}
+radcan_constant([e]) := block([cnst : [], noncnst : []],
+    for ek in e do (
+        if constantp(ek) then
+            push(ek,cnst)
+        else
+            push(ek,noncnst)),
+    radcan(xreduce(''*'',cnst) * xreduce(''*'', noncnst)))
+\end{verbatim}
+\end{maximabox}
+
 
 \begin{notebox}
 \textbf{Notes for the reader.}
