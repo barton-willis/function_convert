@@ -740,23 +740,21 @@ Maxima’s \ttq{radcan} function simplifies expressions involving multivalued fu
 \begin{verbatim}
 (%i1) domain : complex$
 
-(%i2) log(x^2);
-(%o2) log(x^2)
+(%i2) xxx : log(x^2)/log(x);
+(%o2) log(x^2)/log(x)
 
-(%i3) xxx : log(x^2)/log(x);
-(%o3) log(x^2)/log(x)
+(%i3) xxx = radcan(xxx);
+(%o3) log(x^2)/log(x) = 2
 
-(%i4) xxx = radcan(xxx);
-(%o4) log(x^2)/log(x) = 2
-
-(%i5) subst(x=-1, %);
-(%o5) 0 = 2
+(%i4) subst(x=-1, %);
+(%o4) 0 = 2
 \end{verbatim}
 \end{maximabox}
-
 \noindent
-The last line shows that the identity $\log(x^2) = 2\log(x)$ does not hold on its natural domain $\complex_{\neq 0}$. In situations where one must adhere strictly to the principal branch, it is useful to build a converter that applies \ttq{radcan} only in controlled circumstances.  
-There are several possible strategies; here we choose to apply \ttq{radcan} only to \emph{products of constant factors}.
+The last line shows that $\log(x^2) = 2\log(x)$ is not an identity on its natural domain 
+$\complex_{\neq 0}$. In situations where a computation must adhere strictly to the principal branch, it is useful to build a converter that applies \ttq{radcan} only in a controlled way.  
+ Several strategies are possible; here we choose to apply \ttq{radcan} only to \emph{products of constant factors}.
+
 
 \paragraph{The Maxima function}
 We begin by constructing a Maxima function that accepts the list of factors in a product, partitions them into constant and nonconstant terms, multiplies each sublist, applies \ttq{radcan} to the constant product, and finally returns the product of the two results.
@@ -807,7 +805,7 @@ To demonstrate that the converter does \emph{not} simplify the quotient $\log(x^
 \end{maximabox}
 
 \noindent
-In \ttq{(\%o5)}, \ttq{radcan} simplifies the quotient of logarithms to $2$. In contrast, the converter \ttq{"*" = radcan\_constant} preserves the quotient, as intended.
+In line \ttq{(\%o5)}, we see that \ttq{radcan} simplifies the quotient of logarithms to $2$. In contrast, the converter \ttq{"*" = radcan\_constant} preserves the quotient, as intended.
 
 
 \paragraph{A subtle point: redefining a converter}
