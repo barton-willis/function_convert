@@ -34,8 +34,11 @@
        (consp (car e))
        (eq (caar e) 'lambda)))
 
-(defun maxima-function-p (f)
-  (and (atom f) (mget f 'mexpr)))
+(defun maxima-function-lambda (f)
+  "Return the Maxima lambda expression associated with the symbol `f` or nill
+  if `f` has no `mexpr` property.The returned value is a Maxima lambda form,
+  not a Common Lisp function."
+  (and (symbolp f) (mget f 'mexpr)))
 
 (defun converter-key (from to)
   "Return a key for the converter registry."
@@ -674,7 +677,7 @@ The function returns the symbol $done."
   (when (and doc (not (stringp doc)))
         (merror (intl:gettext "Documentation for a converter must be a string; found ~M") doc))
 
-  (let ((gn (maxima-function-p fn)))
+  (let ((gn (maxima-function-lambda fn)))
      (when gn
         (setq fn gn)))
 
