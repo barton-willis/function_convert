@@ -816,14 +816,14 @@ The function returns the symbol $done."
 ;; erf-like functions
 (define-function-converter (%erfi %erf) (op x)
   :builtin
-  "Convert erfi(x) into -i * erf(i*x)."
+  "Convert erfi(x) into -%i * erf(%i*x)."
   (declare (ignore op))
   (let ((z (car x)))
     (mul -1 '$%i (ftake '%erf (mul '$%i z)))))
 
 (define-function-converter (%erf %erfi) (op x)
   :builtin
-  "Convert erf(x) into i * erfi(-i*x)."
+  "Convert erf(x) into %i * erfi(-%i*x)."
   (declare (ignore op))
   (let ((z (car x)))
     (mul '$%i (ftake '%erfi (mul -1 '$%i z)))))

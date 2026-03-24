@@ -562,10 +562,10 @@ Convert @code{erfc(x)} into @code{1 - erf(x)}.
 Convert @code{erf(x)} into @code{1 - erfc(x)}.
 
 @item erf = erfi
-Convert @code{erf(x)} into @code{i*erfi(-i*x)}.
+Convert @code{erf(x)} into @code{%i*erfi(-%i*x)}.
 
 @item erfi = erf
-Convert @code{erfi(x)} into @code{-i*erf(i*x)}.
+Convert @code{erfi(x)} into @code{-%i*erf(%i*x)}.
 
 @item ^ = trigreduce
 Convert integer powers of trigonometric functions to a Fourier sum.
