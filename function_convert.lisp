@@ -1153,7 +1153,6 @@ subexpression."
 (define-function-converter ((:algebraic $hyperbolic) ($exp $hyperbolic)) (op x)
   :builtin
   (setq x (fapply op x))
-  (mtell "x = ~M ~%" x)
   (let ((ll (xgather-args-of x 'mexpt)) (g (gensym)))
     (dolist (lx ll)
       (when (eq '$%e (first lx))
